@@ -1,0 +1,4 @@
+#log_file_dir: "/opt/project/logs/"
+log_file_dir: "/Users/vladaradchenko/Desktop/QC_python/mock-api-server-girl-power/tests"
+log_level: "INFO"
+# add new common parameters for all tests here ...
