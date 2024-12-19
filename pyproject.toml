@@ -3,7 +3,7 @@ name = "tests_lib"
 version = "0.1.0"
 description = ""
 authors = ["Liubomyr Pavlovskyi <zzee19191919@gmail.com>"]
-readme = "README.md"
+readme = "readme.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"

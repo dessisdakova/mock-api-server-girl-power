@@ -13,7 +13,13 @@ def create_logger(logger_name: str, log_file_name: str):
     """
     config = load_config("common_config")
     log_dir = config["log_file_dir"]
+
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+
     log_level_str = config["log_level"]
+
+
 
     logger = logging.getLogger(logger_name)  # create custom logger
     logger.setLevel(logging.getLevelNamesMapping()[log_level_str])
