@@ -1,3 +1,4 @@
 base_url: "https://example.com"
 browser: "some browser"
 wait_time: 10
+log_file_name: "web_ui_log.log"
