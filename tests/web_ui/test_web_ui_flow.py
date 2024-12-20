@@ -1,4 +1,3 @@
-import pytest
 from tests_lib.common.yaml_loaders import load_test_data
 from tests_lib.helpers.web_ui.login_page import LoginPage
 from tests_lib.helpers.web_ui.inventory_page import InventoryPage
@@ -35,6 +34,7 @@ def test_cart_page(driver, logger):
     cart_page.load(5)
     logger.info(f"Page with url '{cart_page.base_url}' is loaded.")
     cart_page.assert_text_in_url("cart")
+    logger.debug(f"Number of items in cart: {cart_page.get_items_count_in_cart()}")
     cart_page.assert_item_count_in_cart(1)
     cart_page.click_checkout()
     logger.info("Checkout button is clicked, loading checkout step one page...")
@@ -56,6 +56,7 @@ def test_checkout_two_page(driver, logger):
     checkout_two_page.load(5)
     logger.info(f"Page with url '{checkout_two_page.base_url}' is loaded.")
     checkout_two_page.assert_text_in_url("checkout-step-two")
+    logger.debug(f"Number of items in order: {checkout_two_page.get_items_count_in_order()}")
     checkout_two_page.assert_items_count_in_order(1)
     checkout_two_page.click_finish_button()
     logger.info("Finish button is clicked, loading checkout complete page...")

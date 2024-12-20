@@ -30,3 +30,11 @@ def driver() -> webdriver:
 def logger() -> CustomLogger:
     log = CustomLogger("web_ui_logger", "web_ui_tests.log")
     return log
+
+
+# request fixture is a special fixture providing information of the requesting test function
+@pytest.fixture(scope="function", autouse=True)
+def log_start_and_results(logger, request):
+    logger.info(f"Starting test... {request.node.name}")
+    yield
+    logger.add_divider()
