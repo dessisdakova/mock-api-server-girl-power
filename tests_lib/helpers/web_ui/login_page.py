@@ -4,7 +4,8 @@ from tests_lib.helpers.web_ui.locators import *
 
 class LoginPage(BasePage):
     """
-    Page object for the login page. Inherits from BasePage.
+    Page object for the login page.
+    Inherits from BasePage.
     """
 
     @property
@@ -18,12 +19,10 @@ class LoginPage(BasePage):
 
     def login(self, username: str, password: str) -> None:
         """
-        Performs a login action by entering the username and password and clicking the login button.
-        Logs the action.
+        Login by entering the username and password, and clicking the login button.
 
-        :param username: The username to enter.
-        :param password: The password to enter.
-        :return: None
+        :param username: The username to log in with.
+        :param password: The password to log in with.
         """
         self.driver.find_element(*USERNAME_FIELD).send_keys(username)
         self.driver.find_element(*PASSWORD_FIELD).send_keys(password)

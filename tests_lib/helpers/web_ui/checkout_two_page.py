@@ -4,7 +4,8 @@ from tests_lib.helpers.web_ui.locators import *
 
 class CheckoutTwoPage(BasePage):
     """
-    Page object for the checkout step two page. Inherits from BasePage.
+    Page object for the checkout step two page.
+    Inherits from BasePage.
     """
     @property
     def base_url(self) -> str:
@@ -24,12 +25,15 @@ class CheckoutTwoPage(BasePage):
         """
         return SUMMARY_INFO_DIV
 
-    def click_finish_button(self):
+    def click_finish_button(self) -> None:
+        """
+        Click the finish button to complete the order process.
+        """
         self.driver.find_element(*FINISH_BUTTON).click()
 
     def get_items_count_in_order(self) -> int:
         """
-        Retrieves all items in the order.
+        Retrieve all items in the order.
 
         :return: The number of items added to the cart.
         """
@@ -37,9 +41,9 @@ class CheckoutTwoPage(BasePage):
 
     def assert_items_count_in_order(self, count: int) -> None:
         """
-        Asserts the count of items in order.
+        Assert that the number of items in the order matches the expected count.
 
-        :param count: Number of items in order - int
-        :return: None
+        :param count: The expected number of items in the order.
+        :raises AssertionError: If the actual count does not match the expected count.
         """
         assert self.get_items_count_in_order() == count, "Item was not added to cart."
