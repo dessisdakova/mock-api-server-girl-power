@@ -4,7 +4,8 @@ from tests_lib.helpers.web_ui.locators import *
 
 class CheckoutCompletePage(BasePage):
     """
-    Page object for the checkout complete page. Inherits from BasePage.
+    Page object for the checkout complete page.
+    Inherits from BasePage.
     """
 
     @property
@@ -17,7 +18,7 @@ class CheckoutCompletePage(BasePage):
         return super().base_url + "checkout-complete.html"
 
     @property
-    def explicit_wait_locator(self):
+    def explicit_wait_locator(self) -> tuple:
         """
         Locator for the element used to verify the checkout complete page has loaded.
 
@@ -27,17 +28,17 @@ class CheckoutCompletePage(BasePage):
 
     def get_message_text(self) -> str:
         """
-        Retrieves the element containing the final message for completed order.
+        Retrieve the text from the message header element.
 
-        :return: String representation of the complete order message.
+        :return: The text content of the message header.
         """
         return self.driver.find_element(*MESSAGE_HEADER).text
 
     def assert_message_text(self, text: str) -> None:
         """
-        Asserts if a given text equals complete order message on website.
+        Assert that the message text matches the expected text.
 
-        :param text: Assertion text - string
-        :return: None
+        :param text: The expected text to compare with the message header.
+        :raises AssertionError: If the actual message text does not match the expected text.
         """
         assert self.get_message_text() == text, "Order was not completed."

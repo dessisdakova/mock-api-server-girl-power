@@ -25,20 +25,19 @@ class BasePage:
 
     def load(self, explicit_wait: int) -> None:
         """
-        Navigates to the base URL and wait for the page to load using explicit wait.
+        Navigate to the base URL and wait for the page to load using explicit wait.
 
-        :param explicit_wait: Time the driver should wait for in seconds - int
-        :return:
+        :param explicit_wait: The time in seconds to wait for the page to load.
         """
         self.driver.get(self.base_url)
         WebDriverWait(self.driver, explicit_wait).until(ec.presence_of_element_located(self.explicit_wait_locator))
 
     def assert_text_in_url(self, text: str) -> None:
         """
-        Asserts if a given text is present in page's URL.
+        Assert that a specific text is present in the base URL.
 
-        :param text: Assertion text - string
-        :return: None
+        :param text: The text to check for in the URL.
+        :raises AssertionError: If the text is not found in the base URL.
         """
         assert text in self.base_url, "Text is not present in URL."
 

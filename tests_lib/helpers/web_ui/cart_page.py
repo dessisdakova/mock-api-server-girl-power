@@ -4,7 +4,8 @@ from tests_lib.helpers.web_ui.locators import *
 
 class CartPage(BasePage):
     """
-    Page object for the cart page. Inherits from BasePage.
+    Page object for the cart page.
+    Inherits from BasePage.
     """
     @property
     def base_url(self) -> str:
@@ -26,7 +27,7 @@ class CartPage(BasePage):
 
     def get_items_count_in_cart(self) -> int:
         """
-        Retrieves all items in the cart.
+        Retrieve all items in the cart.
 
         :return: The number of items added to the cart.
         """
@@ -34,15 +35,15 @@ class CartPage(BasePage):
 
     def click_checkout(self) -> None:
         """
-        Navigates to the checkout step one page by clicking the checkout button.
+        Navigate to the checkout step one page by clicking the checkout button.
         """
         self.driver.find_element(*CHECKOUT_BUTTON).click()
 
     def assert_item_count_in_cart(self, count: int) -> None:
         """
-        Asserts the count of items in cart.
+        Assert the count of items in cart.
 
-        :param count: Number of items added in the cart - int
-        :return: None
+        :param count: The expected number of items in the cart.
+        :raises AssertionError: If the actual count does not match the expected count.
         """
         assert self.get_items_count_in_cart() == count, "Item was not added to cart."
