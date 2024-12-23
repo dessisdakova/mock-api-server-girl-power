@@ -19,8 +19,8 @@ def test_login_page_load_page(driver):
     login_page.assert_text_in_url("saucedemo")
 
 
-@pytest.mark.parametrize("input_data", load_test_data("web_ui_login_test_data"))
-def test_login_page_log_with_credentials(driver, input_data, logger):
+@pytest.mark.parametrize("input_data", load_test_data("web_ui_test_data"))
+def test_login_page_login_with_credentials(driver, input_data, logger):
     # arrange
     login_page = LoginPage(driver)
     login_page.load(5)
@@ -37,12 +37,13 @@ def test_login_page_log_with_credentials(driver, input_data, logger):
     inventory_page.assert_text_in_url("inventory")
 
 
-@pytest.mark.parametrize("input_data", load_test_data("web_ui_buyer_info_test_data"))
+@pytest.mark.parametrize("input_data", load_test_data("web_ui_test_data"))
 def test_inventory_page_add_item_to_cart(driver, logger, input_data):
     # arrange
     login_page = LoginPage(driver)
     login_page.load(5)
     login_page.login(input_data["username"], input_data["password"])
+    logger.debug(f"Login with username: {input_data['username']}.")
     inventory_page = InventoryPage(driver)
     inventory_page.load(5)
 
@@ -63,12 +64,13 @@ def test_inventory_page_add_item_to_cart(driver, logger, input_data):
     cart_page.assert_item_count_in_cart(1)
 
 
-@pytest.mark.parametrize("input_data", load_test_data("web_ui_buyer_info_test_data"))
+@pytest.mark.parametrize("input_data", load_test_data("web_ui_test_data"))
 def test_checkout_one_page_enter_buyer_credentials(driver, input_data, logger):
     # arrange
     login_page = LoginPage(driver)
     login_page.load(5)
     login_page.login(input_data["username"], input_data["password"])
+    logger.debug(f"Login with username: {input_data['username']}.")
 
     inventory_page = InventoryPage(driver)
     inventory_page.load(5)
@@ -93,12 +95,13 @@ def test_checkout_one_page_enter_buyer_credentials(driver, input_data, logger):
         input_data["first_name"], input_data["last_name"], input_data["postal_code"])
 
 
-@pytest.mark.parametrize("input_data", load_test_data("web_ui_buyer_info_test_data"))
+@pytest.mark.parametrize("input_data", load_test_data("web_ui_test_data"))
 def test_checkout_two_page_item_in_order(driver, logger, input_data):
     # arrange
     login_page = LoginPage(driver)
     login_page.load(5)
     login_page.login(input_data["username"], input_data["password"])
+    logger.debug(f"Login with username: {input_data['username']}.")
 
     inventory_page = InventoryPage(driver)
     inventory_page.load(5)
@@ -126,12 +129,13 @@ def test_checkout_two_page_item_in_order(driver, logger, input_data):
     checkout_two_page.assert_items_count_in_order(1)
 
 
-@pytest.mark.parametrize("input_data", load_test_data("web_ui_buyer_info_test_data"))
+@pytest.mark.parametrize("input_data", load_test_data("web_ui_test_data"))
 def test_checkout_complete_page_order_completed(driver, logger, input_data):
     # arrange
     login_page = LoginPage(driver)
     login_page.load(5)
     login_page.login(input_data["username"], input_data["password"])
+    logger.debug(f"Login with username: {input_data['username']}.")
 
     inventory_page = InventoryPage(driver)
     inventory_page.load(5)

@@ -34,7 +34,7 @@ class BasePage:
 
     def assert_text_in_url(self, text: str) -> None:
         """
-        Assert that a specific text is present in the base URL.
+        Assert that a specific text is present in the URL.
 
         :param text: The text to check for in the URL.
         :raises AssertionError: If the text is not found in the base URL.
