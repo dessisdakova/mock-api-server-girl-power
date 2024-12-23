@@ -5,10 +5,11 @@ from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.edge.options import Options as EdgeOptions
 import pytest
+from typing import Generator
 
 
 @pytest.fixture(scope="function")
-def driver(logger) -> webdriver.Remote:
+def driver(logger) -> Generator[webdriver.Remote, None, None]:
     """
     Fixture to initialize a web driver for UI tests based on the configuration.
 

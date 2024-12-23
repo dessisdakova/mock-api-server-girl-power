@@ -42,9 +42,8 @@ class CustomLogger(logging.Logger):
 
     def add_divider(self) -> None:
         """
-        Appends a divider line to the log file separating log sessions for better readability.
+        Append a divider line to the log file separating log sessions for better readability.
 
-        :return: None
         """
         with open(self.log_file_path, "a") as log_file:
             log_file.write("-------------------------------------------------------------------\n")

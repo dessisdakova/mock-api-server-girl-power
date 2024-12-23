@@ -9,6 +9,15 @@ class LoginPage(BasePage):
     """
 
     @property
+    def base_url(self) -> str:
+        """
+        The URL of the login page.
+
+        :return: A string representing the page URL.
+        """
+        return super().base_url
+
+    @property
     def explicit_wait_locator(self) -> tuple:
         """
         Locator for the element used to verify the page has loaded.
