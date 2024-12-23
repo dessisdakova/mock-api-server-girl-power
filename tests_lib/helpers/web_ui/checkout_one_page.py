@@ -46,9 +46,13 @@ class CheckoutOnePage(BasePage):
         :param expected_zc: The expected value for the zip code field.
         :raises AssertionError: If any of the entered values do not match the expected values.
         """
-        assert self.driver.find_element(*FIRST_NAME_FIELD).get_attribute("value") == expected_fn
-        assert self.driver.find_element(*LAST_NAME_FIELD).get_attribute("value") == expected_ln
-        assert self.driver.find_element(*ZIP_CODE_FIELD).get_attribute("value") == str(expected_zc)
+        actual_fn = self.driver.find_element(*FIRST_NAME_FIELD).get_attribute("value")
+        actual_ln = self.driver.find_element(*LAST_NAME_FIELD).get_attribute("value")
+        actual_zc = self.driver.find_element(*ZIP_CODE_FIELD).get_attribute("value")
+
+        assert actual_fn == expected_fn, f"First name does not match - expected: {expected_fn}, actual: {actual_fn}"
+        assert actual_ln == expected_ln, f"Last name does not match - expected: {expected_ln}, actual: {actual_ln}"
+        assert actual_zc == str(expected_zc), f"Zip code does not match - expected: {expected_zc}, actual: {actual_zc}"
 
     def click_continue_button(self) -> None:
         """

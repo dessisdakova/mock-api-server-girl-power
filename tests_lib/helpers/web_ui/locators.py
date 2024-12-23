@@ -7,9 +7,10 @@ LOGIN_BUTTON = (By.CSS_SELECTOR, "input[data-test='login-button']")
 LOGO_DIV = (By.CLASS_NAME, "login_logo")  # for explicit wait
 
 # Inventory Page
-SOPPING_CART_LINK = (By.CSS_SELECTOR, "a[data-test='shopping-cart-link']")
+SHOPPING_CART_LINK = (By.CSS_SELECTOR, "a[data-test='shopping-cart-link']")
 ADD_BACKPACK_BUTTON = (By.CSS_SELECTOR, "button[data-test='add-to-cart-sauce-labs-backpack']")
 ADD_BIKE_LIGHT_BUTTON = (By.CSS_SELECTOR, "button[data-test='add-to-cart-sauce-labs-bike-light']")
+SHOPPING_CART_BADGE = (By.CSS_SELECTOR, "span[data-test='shopping-cart-badge']")
 INVENTORY_CONTAINER = (By.ID, "inventory_container")  # for explicit wait
 
 # Cart Page
