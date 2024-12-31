@@ -1,5 +1,4 @@
 import logging
-import pytest
 import os
 from tests_lib.common.yaml_loaders import load_config
 
