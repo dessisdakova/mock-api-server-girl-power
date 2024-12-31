@@ -8,17 +8,28 @@ Fixtures defined in a conftest.py can be used by any test in that package withou
 
 import pytest
 from tests_lib.common.custom_logger import CustomLogger
+from tests_lib.common.yaml_loaders import load_config
 
 
-@pytest.fixture()
-def logger(request):
+@pytest.fixture(scope="session")
+def config() -> dict:
+    """
+    This fixture is used for reading the api_config.yaml file
+    All parameters in api_config.yaml are read and parsed into dict, which is returned here
+    :return: parsed config file as a dict.
+    """
+    return load_config("api_config")
+
+
+@pytest.fixture
+def logger(request, config: dict) -> CustomLogger:
     """
     Pytest fixture to provide a configured logger instance for all tests.
     This fixture creates a CustomLogger instance with a unique log file name for the test scope=function(default scope)
-    :return: An instance of CustomLogger.
+    The 'request' fixture is a special fixture providing information of the requesting test function
+    :yield: An instance of CustomLogger.
     """
-    log_file_name = f"test_api.log"
-    local_logger = CustomLogger("test_logger", log_file_name)
+    local_logger = CustomLogger("test_logger", config["log_file_name"])
     local_logger.debug(f"Starting {request.node.originalname}")
     yield local_logger
     local_logger.debug(f"Test {request.node.originalname} finished")

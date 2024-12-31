@@ -4,7 +4,7 @@ import json, pytest
 
 
 @pytest.mark.parametrize("status_code", HTTP_STATUS_CODES)
-def test_put_get_inventory_appliances(status_code: int, logger):
+def test_put_get_inventory_appliances(status_code: int, logger, config):
     """
     Test inventory functionality of mock-api-server.
     After executing the put method, we check that the get method for the corresponding inventory_appliances value
@@ -17,13 +17,13 @@ def test_put_get_inventory_appliances(status_code: int, logger):
 
         expected_data_json["status_code"] = status_code
 
-        put_response = execute_put("/inventory/devices", expected_data_json)
+        put_response = execute_put("/inventory/devices", config, expected_data_json)
         put_response_json = put_response.json()
         assert put_response.status_code == 200
         assert put_response_json["new_status_code"] == status_code
         assert put_response_json["new_body"] == expected_data_json["body"]
 
-        get_rsp = execute_get("/inventory/devices")
+        get_rsp = execute_get("/inventory/devices", config)
 
         assert get_rsp.status_code == expected_data_json["status_code"]
         assert get_rsp.json() == expected_data_json["body"]
@@ -33,7 +33,7 @@ def test_put_get_inventory_appliances(status_code: int, logger):
         raise
 
 
-def test_put_inventory_without_key_body(logger):
+def test_put_inventory_without_key_body(logger, config):
     """
     Negative test for PUT inventory functionality of mock-api-server.
     PUT request body should contain both body and status_code.
@@ -42,14 +42,14 @@ def test_put_inventory_without_key_body(logger):
         with open(TEST_DATA_PATH + "PUT_inventory_without_body.json", 'r') as expected_data_file:
             expected_data_json = json.load(expected_data_file)
 
-        put_response = execute_put("/inventory/devices", expected_data_json)
+        put_response = execute_put("/inventory/devices", config, expected_data_json)
         assert put_response.status_code == 500
         logger.info("Test passed successfully")
     except Exception as e:
         logger.error(f"Test failed with error: {e}")
 
 
-def test_put_inventory_without_key_status_code(logger):
+def test_put_inventory_without_key_status_code(logger, config):
     """
     Negative test for PUT inventory functionality of mock-api-server.
     PUT request body should contain both body and status_code.
@@ -58,21 +58,21 @@ def test_put_inventory_without_key_status_code(logger):
         with open(TEST_DATA_PATH + "PUT_inventory_without_status_code.json", 'r') as expected_data_file:
             expected_data_json = json.load(expected_data_file)
 
-        put_response = execute_put("/inventory/devices", expected_data_json)
+        put_response = execute_put("/inventory/devices", config, expected_data_json)
         assert put_response.status_code == 500
         logger.info("Test passed successfully")
     except Exception as e:
         logger.error(f"Test failed with error: {e}")
 
 
-def test_put_inventory_without_request_body(logger):
+def test_put_inventory_without_request_body(logger, config):
     """
     Negative test for PUT inventory functionality of mock-api-server.
     PUT request body should contain both body and status_code.
     In this case PUT request doesn't have any content.
     """
     try:
-        put_response = execute_put("/inventory/devices")
+        put_response = execute_put("/inventory/devices", config)
         assert put_response.status_code == 400
         logger.info("Test passed successfully")
     except Exception as e:

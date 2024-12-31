@@ -1,34 +1,21 @@
-import json, requests
-from tests.api.constants import BASE_URL_HTTP, BASE_URL_HTTPS, HEADERS, CONFIG_FILENAME
+import requests
 from typing import Optional
 
-global_config = None
 
-def get_config() -> dict:
-    global global_config
-    if global_config is None:
-        with open(CONFIG_FILENAME, 'r') as f:
-            global_config = json.load(f)
-    return global_config
-
-
-def execute_get(url: str) -> requests.Response:
-    config = get_config()
+def execute_get(url: str, config: dict) -> requests.Response:
     if config["use_https"]:
-        return requests.get(BASE_URL_HTTPS + url, verify=config["https_config"]["cert_file"])
-    return requests.get(BASE_URL_HTTP + url)
+        return requests.get(config["base_url_https"] + url, verify=config["https_config"]["cert_file"])
+    return requests.get(config["base_url_http"] + url)
 
 
-def execute_post(url: str) -> requests.Response:
-    config = get_config()
+def execute_post(url: str, config: dict) -> requests.Response:
     if config["use_https"]:
-        return requests.post(BASE_URL_HTTPS + url, headers=HEADERS, verify=config["https_config"]["cert_file"])
-    return requests.post(BASE_URL_HTTP + url, headers=HEADERS)
+        return requests.post(config["base_url_https"] + url, verify=config["https_config"]["cert_file"])
+    return requests.post(config["base_url_http"] + url)
 
 
-def execute_put(url: str, body: Optional[dict] = None) -> requests.Response:
-    config = get_config()
+def execute_put(url: str, config: dict, body: Optional[dict] = None) -> requests.Response:
     if config["use_https"]:
-        return requests.put(BASE_URL_HTTPS + url, headers=HEADERS, json=body, verify=config["https_config"]["cert_file"])
-    return requests.put(BASE_URL_HTTP + url, headers=HEADERS, json=body)
+        return requests.put(config["base_url_https"] + url, json=body, verify=config["https_config"]["cert_file"])
+    return requests.put(config["base_url_http"] + url, json=body)
 

@@ -1,1 +1,7 @@
-log_file_name: "api_log.log"
+log_file_name: "test_api.log"
+use_https: true
+https_config: {
+    cert_file: "/root/ca/rsa/volumed_dir/ca.cert.pem"
+}
+base_url_http: "http://api-mock-server:80"
+base_url_https: "https://api-mock-server:443"
