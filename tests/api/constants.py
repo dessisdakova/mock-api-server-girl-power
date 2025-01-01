@@ -4,5 +4,4 @@ HTTP_STATUS_CODES = list(range(200, 204)) + list(range(205, 209)) + [226] + list
                     list(range(500, 509)) + [510, 511]
 HTTP_STATUS_CODES_FOR_PUT = HTTP_STATUS_CODES + [123, "zero"]
 
-CONFIG_FILENAME = "tests/api/test_config.json"
 TEST_DATA_PATH = "test_data/test_data_api/"
