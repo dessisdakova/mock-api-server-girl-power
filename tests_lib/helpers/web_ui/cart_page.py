@@ -38,13 +38,3 @@ class CartPage(BasePage):
         Navigate to the checkout step one page by clicking the checkout button.
         """
         self.driver.find_element(*CHECKOUT_BUTTON).click()
-
-    def assert_item_count_in_cart(self, expected_count: int) -> None:
-        """
-        Assert the count of items in cart.
-
-        :param expected_count: The expected number of items in the cart.
-        :raises AssertionError: If the actual count does not match the expected count.
-        """
-        actual_count = self.get_items_count_in_cart()
-        assert actual_count == expected_count, f"Expected {expected_count} items in cart, but found {actual_count}."

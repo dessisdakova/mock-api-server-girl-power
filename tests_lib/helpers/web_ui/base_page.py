@@ -37,14 +37,3 @@ class BasePage:
         if not hasattr(self, "explicit_wait_locator"):
             raise AttributeError("No explicit wait locator provided or defined in the class.")
         WebDriverWait(self.driver, explicit_wait).until(ec.presence_of_element_located(self.explicit_wait_locator))
-
-    def assert_text_in_url(self, text: str) -> None:
-        """
-        Assert that a specific text is present in the URL.
-
-        :param text: The text to check for in the URL.
-        :raises AssertionError: If the text is not found in the base URL.
-        """
-        current_url = self.driver.current_url
-        assert text in current_url, f"Expected text '{text}' not found in URL '{current_url}'."
-

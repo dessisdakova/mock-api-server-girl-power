@@ -38,13 +38,3 @@ class CheckoutTwoPage(BasePage):
         :return: The number of items added to the cart.
         """
         return len(self.driver.find_elements(*ITEMS_IN_CART))
-
-    def assert_items_count_in_order(self, expected_count: int) -> None:
-        """
-        Assert that the number of items in the order matches the expected count.
-
-        :param expected_count: The expected number of items in the order.
-        :raises AssertionError: If the actual count does not match the expected count.
-        """
-        actual_count = self.get_items_count_in_order()
-        assert actual_count == expected_count, f"Expected {expected_count} items in order, but found {actual_count}."
