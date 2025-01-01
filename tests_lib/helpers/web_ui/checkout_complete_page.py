@@ -33,12 +33,3 @@ class CheckoutCompletePage(BasePage):
         :return: The text content of the message header.
         """
         return self.driver.find_element(*MESSAGE_HEADER).text
-
-    def assert_message_text(self, text: str) -> None:
-        """
-        Assert that the message text matches the expected text.
-
-        :param text: The expected text to compare with the message header.
-        :raises AssertionError: If the actual message text does not match the expected text.
-        """
-        assert self.get_message_text() == text, "Order was not completed."

@@ -5,10 +5,22 @@ from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.edge.options import Options as EdgeOptions
 import pytest
+from typing import Generator
+
+
+@pytest.fixture(scope="session")
+def logger() -> CustomLogger:
+    """
+    Fixture to provide a logger for web UI tests.
+
+    :return: A CustomLogger instance for logging test-related information.
+    """
+    log = CustomLogger("web_ui_logger", "web_ui_tests.log")
+    return log
 
 
 @pytest.fixture(scope="function")
-def driver(logger) -> webdriver.Remote:
+def driver(logger, request) -> Generator[webdriver.Remote, None, None]:
     """
     Fixture to initialize a web driver for UI tests based on the configuration.
 
@@ -16,6 +28,7 @@ def driver(logger) -> webdriver.Remote:
     and creates a remote WebDriver instance. It also sets an implicit wait time for elements.
 
     :param logger: Logger fixture to log browser type.
+    :param request: Request object providing test context information.
     :return: A web driver instance to be used for the duration of the test session.
     :raises TypeError: If the specified browser is not supported.
     """
@@ -32,35 +45,16 @@ def driver(logger) -> webdriver.Remote:
 
     options.add_argument("--headless")
     driver = webdriver.Remote(command_executor=config["executor"], options=options)
+    driver.implicitly_wait(config["implicit_wait_time"])
 
     capabilities = driver.capabilities
-    logger.debug(f"Running test on: {capabilities['browserName']} version {capabilities['browserVersion']}")
+    logger.debug(f"Initializing a WebDriver for {capabilities['browserName']} version {capabilities['browserVersion']}")
+    logger.info(f"Running test '{request.node.name}'...")
 
-    driver.implicitly_wait(config["wait_time"])
     yield driver
     driver.quit()
 
-
-@pytest.fixture(scope="session")
-def logger() -> CustomLogger:
-    """
-    Fixture to provide a logger for web UI tests.
-
-    :return: A CustomLogger instance for logging test-related information.
-    """
-    log = CustomLogger("web_ui_logger", "web_ui_tests.log")
-    return log
-
-
-# request fixture is a special fixture providing information of the requesting test function
-@pytest.fixture(scope="function", autouse=True)
-def log_start_and_results(logger, request):
-    """
-    Automatically logs the start of each test function and adds a decides for better readability.
-
-    :param logger: Logger fixture for logging test details.
-    :param request: Request object providing test context information.
-    """
-    logger.info(f"Starting test... {request.node.name}")
-    yield
+    logger.debug(f"Quitting a WebDriver for {capabilities['browserName']}")
     logger.add_divider()
+
+

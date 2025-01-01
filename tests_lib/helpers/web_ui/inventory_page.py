@@ -37,8 +37,15 @@ class InventoryPage(BasePage):
         """
         self.driver.find_element(*ADD_BIKE_LIGHT_BUTTON).click()
 
+    def get_items_count_in_cart(self) -> int:
+        """
+        Retrieve items count in cart from shopping cart badge.
+        """
+        items = self.driver.find_element(*SHOPPING_CART_BADGE).text
+        return int(items)
+
     def go_to_cart(self) -> None:
         """
         Navigate to the shopping cart page by clicking the cart link.
         """
-        self.driver.find_element(*SOPPING_CART_LINK).click()
+        self.driver.find_element(*SHOPPING_CART_LINK).click()

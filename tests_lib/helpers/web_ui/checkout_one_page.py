@@ -37,18 +37,16 @@ class CheckoutOnePage(BasePage):
         self.driver.find_element(*LAST_NAME_FIELD).send_keys(last_name)
         self.driver.find_element(*ZIP_CODE_FIELD).send_keys(zip_code)
 
-    def assert_buyer_into_is_entered(self, expected_fn: str, expected_ln: str, expected_zc: str) -> None:
+    def get_buyer_info(self) -> tuple:
         """
-        Assert that the buyer's first name, last name, and zip code are correctly entered in the form.
+        Retrieve the buyer's first name, last name, and zip code from the form.
 
-        :param expected_fn: The expected value for the first name field.
-        :param expected_ln: The expected value for the last name field.
-        :param expected_zc: The expected value for the zip code field.
-        :raises AssertionError: If any of the entered values do not match the expected values.
+        :return: A tuple containing the first name, last name, and zip code as strings.
         """
-        assert self.driver.find_element(*FIRST_NAME_FIELD).get_attribute("value") == expected_fn
-        assert self.driver.find_element(*LAST_NAME_FIELD).get_attribute("value") == expected_ln
-        assert self.driver.find_element(*ZIP_CODE_FIELD).get_attribute("value") == str(expected_zc)
+        first_name = self.driver.find_element(*FIRST_NAME_FIELD).get_attribute("value")
+        last_name = self.driver.find_element(*LAST_NAME_FIELD).get_attribute("value")
+        zip_code = self.driver.find_element(*ZIP_CODE_FIELD).get_attribute("value")
+        return first_name, last_name, zip_code
 
     def click_continue_button(self) -> None:
         """
