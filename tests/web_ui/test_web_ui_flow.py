@@ -109,7 +109,7 @@ def test_checkout_one_page_fill_buyer_information(driver, input_data, logger):
 
     # assert
     Assertions.assert_text_in_current_url(driver, "checkout-step-one")
-    Assertions.assert_buyer_into_is_entered(checkout_one_page.get_buyer_info(),
+    Assertions.assert_buyer_info_is_entered(checkout_one_page.get_buyer_info(),
                                             input_data["first_name"], input_data["last_name"], input_data["postal_code"])
 
 
