@@ -26,7 +26,7 @@ class QueryHelper(DatabaseHelper):
         :param actual: The actual result.
         :raises AssertionError: If the results do not match.
         """
-        assert expected == actual
+        assert expected == actual, f"Result mismatch:\n Expected: {expected} \n Actual: {actual}\n"
 
     def execute_query(self, query: str) -> List[tuple]:
         """

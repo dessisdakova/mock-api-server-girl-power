@@ -4,7 +4,7 @@ import psycopg2
 
 class DatabaseHelper:
     """
-    Helper class for managing database configuration and setup.
+    Base class for managing database configuration and setup.
     """
     def __init__(self):
         """
