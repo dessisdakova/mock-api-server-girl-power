@@ -32,8 +32,9 @@ def test_post_guid_add(logger_fixture: CustomLogger, request_executor):
         assert post_response.status_code == 200
         assert NEW_GUID in post_response.json()['guids']
         logger_fixture.info("Test passed successfully")
-    except Exception as e:
+    except AssertionError as e:
         logger_fixture.error(f"Test failed with error: {e}")
+        raise
 
 
 def test_post_guid_add_without_guid(logger_fixture: CustomLogger, request_executor):
@@ -44,8 +45,9 @@ def test_post_guid_add_without_guid(logger_fixture: CustomLogger, request_execut
         post_response = request_executor.execute_post(f"//add")
         assert post_response.status_code == 404
         logger_fixture.info("Test passed successfully")
-    except Exception as e:
+    except AssertionError as e:
         logger_fixture.error(f"Test failed with error: {e}")
+        raise
 
 
 @pytest.mark.parametrize("status_code", HTTP_STATUS_CODES_FOR_PUT)
@@ -70,8 +72,9 @@ def test_put_guids(status_code: int | str, logger_fixture: CustomLogger, request
         assert put_response_json["new_status_code"] == status_code
         assert put_response_json["new_body"] == expected_data_json["body"]
         logger_fixture.info("Test passed successfully")
-    except Exception as e:
+    except AssertionError as e:
         logger_fixture.error(f"Test failed with error: {e}")
+        raise
 
 
 @pytest.mark.parametrize("test_file", [
@@ -90,7 +93,7 @@ def test_put_guids_without_key_body(test_file, logger_fixture: CustomLogger, req
         put_response = request_executor.execute_put("/guids", expected_data_json)
         assert put_response.status_code == 500
         logger_fixture.info("Test passed successfully")
-    except Exception as e:
+    except AssertionError as e:
         logger_fixture.error(f"Test failed with error: {e}")
         raise
 
@@ -105,8 +108,9 @@ def test_put_guids_without_request_body(logger_fixture: CustomLogger, request_ex
         put_response = request_executor.execute_put("/guids")
         assert put_response.status_code == 400
         logger_fixture.info("Test passed successfully")
-    except Exception as e:
+    except AssertionError as e:
         logger_fixture.error(f"Test failed with error: {e}")
+        raise
 
 
 
@@ -122,7 +126,7 @@ def test_get_guids(logger_fixture: CustomLogger, request_executor):
         assert get_rsp.status_code == expected_data_json["status_code"]
         assert get_rsp.json() == expected_data_json["body"]
         logger_fixture.info("Test passed successfully")
-    except Exception as e:
+    except AssertionError as e:
         logger_fixture.error(f"Test failed with error: {e}")
         raise
 
@@ -139,5 +143,6 @@ def test_post_several_items(logger_fixture: CustomLogger, request_executor):
         get_rsp = request_executor.execute_get(f"/guids")
         assert get_rsp.status_code == 200
         assert get_rsp.json()['guids'] == [NEW_GUID] * 5
-    except Exception as e:
+    except AssertionError as e:
         logger_fixture.error(f"Test failed with error: {e}")
+        raise

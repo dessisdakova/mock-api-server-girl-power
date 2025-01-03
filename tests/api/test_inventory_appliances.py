@@ -23,7 +23,7 @@ def test_put_get_inventory_appliances(status_code: int, logger_fixture: CustomLo
 
         put_response = request_executor.execute_put("/inventory/devices", expected_data_json)
         put_response_json = put_response.json()
-        assert put_response.status_code == 200
+        assert put_response.status_code == 206
         assert put_response_json["new_status_code"] == status_code
         assert put_response_json["new_body"] == expected_data_json["body"]
 
@@ -32,7 +32,7 @@ def test_put_get_inventory_appliances(status_code: int, logger_fixture: CustomLo
         assert get_rsp.status_code == expected_data_json["status_code"]
         assert get_rsp.json() == expected_data_json["body"]
         logger_fixture.info("Test passed successfully")
-    except Exception as e:
+    except AssertionError as e:
         logger_fixture.error(f"Test failed with error: {e}")
         raise
 
@@ -47,8 +47,9 @@ def test_put_inventory_without_key_body(logger_fixture: CustomLogger, request_ex
         put_response = request_executor.execute_put("/inventory/devices", expected_data_json)
         assert put_response.status_code == 500
         logger_fixture.info("Test passed successfully")
-    except Exception as e:
+    except AssertionError as e:
         logger_fixture.error(f"Test failed with error: {e}")
+        raise
 
 
 def test_put_inventory_without_key_status_code(logger_fixture: CustomLogger, request_executor):
@@ -61,8 +62,9 @@ def test_put_inventory_without_key_status_code(logger_fixture: CustomLogger, req
         put_response = request_executor.execute_put("/inventory/devices", expected_data_json)
         assert put_response.status_code == 500
         logger_fixture.info("Test passed successfully")
-    except Exception as e:
+    except AssertionError as e:
         logger_fixture.error(f"Test failed with error: {e}")
+        raise
 
 
 def test_put_inventory_without_request_body(logger_fixture: CustomLogger, request_executor):
@@ -75,5 +77,6 @@ def test_put_inventory_without_request_body(logger_fixture: CustomLogger, reques
         put_response = request_executor.execute_put("/inventory/devices")
         assert put_response.status_code == 400
         logger_fixture.info("Test passed successfully")
-    except Exception as e:
+    except AssertionError as e:
         logger_fixture.error(f"Test failed with error: {e}")
+        raise
