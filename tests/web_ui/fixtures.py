@@ -48,13 +48,13 @@ def driver(logger, request) -> Generator[webdriver.Remote, None, None]:
     driver.implicitly_wait(config["implicit_wait_time"])
 
     capabilities = driver.capabilities
-    logger.debug(f"Initializing a WebDriver for {capabilities['browserName']} version {capabilities['browserVersion']}")
+    logger.debug(f"Initializing a WebDriver for {capabilities['browserName']} version {capabilities['browserVersion']}.")
     logger.info(f"Running test '{request.node.name}'...")
 
     yield driver
     driver.quit()
 
-    logger.debug(f"Quitting a WebDriver for {capabilities['browserName']}")
+    logger.debug(f"Quitting the WebDriver for {capabilities['browserName']}.")
     logger.add_divider()
 
 
