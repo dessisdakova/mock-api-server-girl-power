@@ -42,14 +42,14 @@ def test_inventory_page_add_items_to_cart(driver, logger, input_data):
     login_page.load(5)
     login_page.login(input_data["username"], input_data["password"])
     logger.debug(f"Login with username: {input_data['username']}.")
+    logger.info("Login button is clicked, loading inventory page...")
     inventory_page = InventoryPage(driver)
     inventory_page.load(5)
 
     # act
-    logger.debug(f"Page with url '{inventory_page.base_url}' is loaded.")
-    inventory_page.add_backpack_to_cart()
+    inventory_page.add_item_to_cart("backpack")
     logger.info("'Sauce Labs Backpack' is added to cart.")
-    inventory_page.add_bike_light_to_cart()
+    inventory_page.add_item_to_cart("bike-light")
     logger.info("'Sauce Labs Bike Light' is added to cart.")
 
     # assert
@@ -75,8 +75,8 @@ def test_cart_page_view_shopping_cart(driver, logger, input_data):
     logger.debug(f"Login with username: {input_data['username']}.")
     inventory_page = InventoryPage(driver)
     inventory_page.load(5)
-    inventory_page.add_backpack_to_cart()
-    inventory_page.add_bike_light_to_cart()
+    inventory_page.add_item_to_cart("backpack")
+    inventory_page.add_item_to_cart("bike-light")
     inventory_page.go_to_cart()
     logger.info("Shopping cart link is clicked, loading cart page...")
 
@@ -97,7 +97,7 @@ def test_cart_page_view_shopping_cart(driver, logger, input_data):
 @pytest.mark.parametrize("input_data", load_test_data("web_ui_common_test_data"))
 def test_checkout_one_page_fill_buyer_information(driver, input_data, logger):
     """
-    Test that thr form for buyer information in Checkout step One page can be filled.
+    Test that the form for buyer information in Checkout step One page can be filled.
     """
     # arrange
     login_page = LoginPage(driver)
@@ -107,7 +107,8 @@ def test_checkout_one_page_fill_buyer_information(driver, input_data, logger):
 
     inventory_page = InventoryPage(driver)
     inventory_page.load(5)
-    inventory_page.add_backpack_to_cart()
+    inventory_page.add_item_to_cart("backpack")
+    inventory_page.add_item_to_cart("bike-light")
     inventory_page.go_to_cart()
 
     cart_page = CartPage(driver)
@@ -146,8 +147,8 @@ def test_checkout_two_page_verify_items_in_order(driver, logger, input_data):
 
     inventory_page = InventoryPage(driver)
     inventory_page.load(5)
-    inventory_page.add_backpack_to_cart()
-    inventory_page.add_bike_light_to_cart()
+    inventory_page.add_item_to_cart("backpack")
+    inventory_page.add_item_to_cart("bike-light")
     inventory_page.go_to_cart()
 
     cart_page = CartPage(driver)
@@ -177,7 +178,7 @@ def test_checkout_two_page_verify_items_in_order(driver, logger, input_data):
 
 
 @pytest.mark.parametrize("input_data", load_test_data("web_ui_common_test_data"))
-def test_checkout_complete_page_order_completed(driver, logger, input_data):
+def test_checkout_complete_page_verify_order_is_completed(driver, logger, input_data):
     """
     Test that the order is completed.
     """
@@ -189,8 +190,8 @@ def test_checkout_complete_page_order_completed(driver, logger, input_data):
 
     inventory_page = InventoryPage(driver)
     inventory_page.load(5)
-    inventory_page.add_backpack_to_cart()
-    inventory_page.add_bike_light_to_cart()
+    inventory_page.add_item_to_cart("backpack")
+    inventory_page.add_item_to_cart("bike-light")
     inventory_page.go_to_cart()
 
     cart_page = CartPage(driver)

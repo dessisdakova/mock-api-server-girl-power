@@ -7,6 +7,8 @@ from abc import ABC, abstractmethod
 class BasePage(ABC):
     """
     Base class for all page objects. Provides shared functionalities.
+    Inherits Abstract Base Class to ensure each derived class implements
+    abstract property 'explicit_wait_locator' for page loading.
     """
     def __init__(self, driver: webdriver.Remote):
         """
@@ -30,9 +32,9 @@ class BasePage(ABC):
     def explicit_wait_locator(self) -> tuple:
         """
         Each derived class must define the "explicit_wait_locator" property,
-        which is used to verify the page has loaded before proceeding.
+        which is used to verify the page has loaded before proceeding using a provided locator for an element.
 
-        :return: A tuple representing the locator (By, value).
+        :return: A tuple representing the locator (By, locator).
         """
         pass
 
