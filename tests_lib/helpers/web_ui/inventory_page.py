@@ -25,17 +25,22 @@ class InventoryPage(BasePage):
         """
         return INVENTORY_CONTAINER
 
-    def add_backpack_to_cart(self) -> None:
+    def add_item_to_cart(self, item: str) -> None:
         """
-        Click the button to add the backpack item to the shopping cart.
-        """
-        self.driver.find_element(*ADD_BACKPACK_BUTTON).click()
+        Add item to cart based on the following values:
+         - "backpack" - adds Sauce Labs Backpack
+         - "bike-light" - adds Sauce Labs Bike Light
 
-    def add_bike_light_to_cart(self) -> None:
+        :param item: Must be one of the provided values.
+        :return: None
+        :raises ValueError: If the value of item does not match the provided ones.
         """
-        Click the button to add the bike light item to the shopping cart.
-        """
-        self.driver.find_element(*ADD_BIKE_LIGHT_BUTTON).click()
+        if item == "backpack":
+            self.driver.find_element(*ADD_BACKPACK_BUTTON).click()
+        elif item == "bike-light":
+            self.driver.find_element(*ADD_BIKE_LIGHT_BUTTON).click()
+        else:
+            raise ValueError(f"Unknown item '{item}'!")
 
     def get_items_count_in_cart(self) -> int:
         """
