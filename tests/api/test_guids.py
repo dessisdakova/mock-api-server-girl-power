@@ -1,10 +1,11 @@
-import json
 import pytest
 
-from tests.api.constants import HTTP_STATUS_CODES_FOR_PUT, TEST_DATA_PATH
+from tests.api.constants import TEST_DATA_PATH
 from tests_lib.helpers.api.request_executors.request_executor_fixture import request_executor
 from tests_lib.common.custom_logger import CustomLogger
 from tests_lib.common.json_loader import load_json
+
+#TODO: execute_put("/guids", empty_guids), url somehow change it
 
 
 @pytest.fixture(autouse=True, scope="function")
@@ -15,7 +16,7 @@ def clear_guids(request_executor, logger_fixture):
     so all tests can run independently and reliably
     """
     logger_fixture.info("clear_guids")
-    empty_guids = load_json(TEST_DATA_PATH + 'PUT_guids_empty_list.json', logger_fixture)
+    empty_guids = load_json(TEST_DATA_PATH + 'PUT_guids_empty_list.json')
     put_response = request_executor.execute_put("/guids", empty_guids)
     assert put_response.status_code == 200
 
@@ -25,7 +26,7 @@ def test_post_guid_add(logger_fixture: CustomLogger, request_executor):
     Verifying positive case: that response return valid body and status for POST request which contain guid in URL.
     """
     try:
-        new_guid = load_json(TEST_DATA_PATH + "new_guid.json", logger_fixture)
+        new_guid = load_json(TEST_DATA_PATH + "new_guid.json")
         post_response = request_executor.execute_post(f"/{new_guid}/add")
         assert post_response.status_code == 200
         assert new_guid in post_response.json()['guids']
@@ -48,7 +49,7 @@ def test_post_guid_add_without_guid(logger_fixture: CustomLogger, request_execut
         raise
 
 
-@pytest.mark.parametrize("status_code", HTTP_STATUS_CODES_FOR_PUT)
+@pytest.mark.parametrize("status_code", load_json(TEST_DATA_PATH + "http_status_codes.json")["HTTP_STATUS_CODES_FOR_PUT"])
 def test_put_guids(status_code: int | str, logger_fixture: CustomLogger, request_executor):
     """
     Test guids functionality of mock-api-server.
@@ -57,7 +58,7 @@ def test_put_guids(status_code: int | str, logger_fixture: CustomLogger, request
     """
     logger_fixture.info(f"Starting test_put_get_guids with status_code: {status_code}")
     try:
-        expected_data_json = load_json(TEST_DATA_PATH + "PUT_guids_positive.json", logger_fixture)
+        expected_data_json = load_json(TEST_DATA_PATH + "PUT_guids_positive.json")
         expected_data_json["status_code"] = status_code
         put_response = request_executor.execute_put(f"/guids", expected_data_json)
         put_response_json = put_response.json()
@@ -82,7 +83,7 @@ def test_put_guids_without_key_body(test_file, logger_fixture: CustomLogger, req
     """
     test_file_path = TEST_DATA_PATH + test_file
     try:
-        expected_data_json = load_json(test_file_path, logger_fixture)
+        expected_data_json = load_json(test_file_path)
         put_response = request_executor.execute_put("/guids", expected_data_json)
         assert put_response.status_code == 500
         logger_fixture.info("Test passed successfully")
@@ -111,9 +112,7 @@ def test_get_guids(logger_fixture: CustomLogger, request_executor):
     Test guids functionality of mock-api-server using GET request.
     """
     try:
-        # with open(TEST_DATA_PATH + "PUT_guids_empty_list.json", 'r') as expected_data_file:
-        #     expected_data_json = json.load(expected_data_file)
-        expected_data_json = load_json(TEST_DATA_PATH + "PUT_guids_empty_list.json", logger_fixture)
+        expected_data_json = load_json(TEST_DATA_PATH + "PUT_guids_empty_list.json")
         get_rsp = request_executor.execute_get(f"/guids")
         assert get_rsp.status_code == expected_data_json["status_code"]
         assert get_rsp.json() == expected_data_json["body"]
@@ -129,7 +128,7 @@ def test_post_several_items(logger_fixture: CustomLogger, request_executor):
     Then verifying guids list using GET request
     """
     try:
-        new_guid = load_json(TEST_DATA_PATH + "new_guid.json", logger_fixture)
+        new_guid = load_json(TEST_DATA_PATH + "new_guid.json")
         for _ in range(5):
             request_executor.execute_post(f"/{new_guid}/add")
 
