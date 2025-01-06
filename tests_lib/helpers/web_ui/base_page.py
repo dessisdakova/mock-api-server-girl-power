@@ -7,12 +7,11 @@ from abc import ABC, abstractmethod
 class BasePage(ABC):
     """
     Base class for all page objects. Provides shared functionalities.
-    Inherits Abstract Base Class to ensure each derived class implements
-    abstract property 'explicit_wait_locator' for page loading.
     """
     def __init__(self, driver: webdriver.Remote):
         """
-        Initialize the BasePage with a WebDriver instance.
+        Shared constructor for child classes with a WebDriver instance.
+        BasePage is an ABC, so an instance can not be created directly.
 
         :param driver: WebDriver instance to interact with the browser.
         """
