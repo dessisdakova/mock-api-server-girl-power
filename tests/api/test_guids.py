@@ -6,9 +6,6 @@ from tests_lib.helpers.api.request_executors.request_executor_fixture import req
 from tests_lib.common.custom_logger import CustomLogger
 from tests_lib.common.json_loader import load_json
 
-#  TODO: move to test_data_api
-NEW_GUID = '12345678-abcd-ef01-2345-6789abcde-aka'
-
 
 @pytest.fixture(autouse=True, scope="function")
 def clear_guids(request_executor, logger_fixture):
@@ -28,9 +25,10 @@ def test_post_guid_add(logger_fixture: CustomLogger, request_executor):
     Verifying positive case: that response return valid body and status for POST request which contain guid in URL.
     """
     try:
-        post_response = request_executor.execute_post(f"/{NEW_GUID}/add")
+        new_guid = load_json(TEST_DATA_PATH + "new_guid.json", logger_fixture)
+        post_response = request_executor.execute_post(f"/{new_guid}/add")
         assert post_response.status_code == 200
-        assert NEW_GUID in post_response.json()['guids']
+        assert new_guid in post_response.json()['guids']
         logger_fixture.info("Test passed successfully")
     except AssertionError as e:
         logger_fixture.error(f"Test failed with error: {e}")
@@ -131,12 +129,13 @@ def test_post_several_items(logger_fixture: CustomLogger, request_executor):
     Then verifying guids list using GET request
     """
     try:
+        new_guid = load_json(TEST_DATA_PATH + "new_guid.json", logger_fixture)
         for _ in range(5):
-            request_executor.execute_post(f"/{NEW_GUID}/add")
+            request_executor.execute_post(f"/{new_guid}/add")
 
         get_rsp = request_executor.execute_get(f"/guids")
         assert get_rsp.status_code == 200
-        assert get_rsp.json()['guids'] == [NEW_GUID] * 5
+        assert get_rsp.json()['guids'] == [new_guid] * 5
     except AssertionError as e:
         logger_fixture.error(f"Test failed with error: {e}")
         raise
