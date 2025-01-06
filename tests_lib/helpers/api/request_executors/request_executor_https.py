@@ -1,7 +1,7 @@
 import requests
 from typing import Optional
 
-from tests.api.request_executors.request_executor import RequestExecutor
+from tests_lib.helpers.api.request_executors.request_executor import RequestExecutor
 from tests_lib.common.custom_logger import CustomLogger
 
 

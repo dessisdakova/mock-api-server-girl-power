@@ -2,7 +2,7 @@
 from tests.api.constants import HTTP_STATUS_CODES, TEST_DATA_PATH
 import json, pytest
 
-from tests.api.request_executors.request_executor_fixture import request_executor
+from tests_lib.helpers.api.request_executors.request_executor_fixture import request_executor
 from tests_lib.common.custom_logger import CustomLogger
 from tests_lib.common.json_loader import load_json
 
@@ -16,14 +16,12 @@ def test_put_get_inventory_appliances(status_code: int, logger_fixture: CustomLo
     """
     logger_fixture.info(f"Starting test_put_get_guids with status_code: {status_code}")
     try:
-        # with open(TEST_DATA_PATH + "PUT_inventory_positive.json", 'r') as expected_data_file:
-        #     expected_data_json = json.load(expected_data_file)
         expected_data_json = load_json(TEST_DATA_PATH + "PUT_inventory_positive.json", logger_fixture)
         expected_data_json["status_code"] = status_code
 
         put_response = request_executor.execute_put("/inventory/devices", expected_data_json)
         put_response_json = put_response.json()
-        assert put_response.status_code == 206
+        assert put_response.status_code == 200
         assert put_response_json["new_status_code"] == status_code
         assert put_response_json["new_body"] == expected_data_json["body"]
 
