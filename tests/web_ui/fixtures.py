@@ -54,19 +54,24 @@ def driver(config, logger, request) -> Generator[webdriver.Remote, None, None]:
         options = EdgeOptions()
     else:
         raise ValueError(f"Unsupported browser: '{config['browser']}'")
-
     options.add_argument("--headless")
-    driver = webdriver.Remote(command_executor=config["executor"], options=options)
+
+    try:
+        driver = webdriver.Remote(command_executor=config["executor"], options=options)
+    except Exception as e:
+        logger.error(f"Failed to initialize WebDriver: {e}")
+        raise
+
     driver.implicitly_wait(config["implicit_wait_time"])
 
     capabilities = driver.capabilities
-    logger.debug(f"Initializing a WebDriver for {capabilities['browserName']} version {capabilities['browserVersion']}")
+    logger.debug(f"Initialized WebDriver for {capabilities['browserName']} version {capabilities['browserVersion']}.")
     logger.info(f"Running test '{request.node.name}'...")
 
     yield driver
     driver.quit()
 
-    logger.debug(f"Quitting a WebDriver for {capabilities['browserName']}")
+    logger.debug(f"WebDriver is closed.")
     logger.add_divider()
 
 

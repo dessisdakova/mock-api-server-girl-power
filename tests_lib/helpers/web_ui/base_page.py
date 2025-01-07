@@ -9,7 +9,7 @@ class BasePage:
     """
     def __init__(self, driver: webdriver.Remote):
         """
-        Initialize the BasePage with a WebDriver instance.
+        Initialize with a WebDriver instance.
 
         :param driver: WebDriver instance to interact with the browser.
         """
@@ -35,5 +35,5 @@ class BasePage:
         """
         self.driver.get(self.base_url)
         if not hasattr(self, "explicit_wait_locator"):
-            raise AttributeError("No explicit wait locator provided or defined in the class.")
+            raise AttributeError(f"No explicit wait locator provided in {self.__class__.__name__} class.")
         WebDriverWait(self.driver, explicit_wait).until(ec.presence_of_element_located(self.explicit_wait_locator))

@@ -39,7 +39,7 @@ class Assertions:
         assert actual_count == expected_count, f"Expected {expected_count} items in cart, but found {actual_count}."
 
     @staticmethod
-    def assert_buyer_into_is_entered(actual_info: tuple, expected_fn: str, expected_ln: str, expected_zc: str) -> None:
+    def assert_buyer_info_is_entered(actual_info: tuple, expected_fn: str, expected_ln: str, expected_zc: str) -> None:
         """
         Assert that the buyer's first name, last name, and zip code are correctly entered in the form.
 
