@@ -9,7 +9,7 @@ from tests_lib.helpers.web_ui.assertions import Assertions
 from tests.web_ui.fixtures import *
 
 
-@pytest.mark.parametrize("input_data", load_test_data("web_ui_login_credentials_test_data"))
+@pytest.mark.parametrize("input_data", load_test_data("web_ui", "web_ui_login_credentials_test_data"))
 def test_login_page_successful_login(driver, input_data, logger):
     """
     Test login into the website using different users.
@@ -32,7 +32,7 @@ def test_login_page_successful_login(driver, input_data, logger):
         raise
 
 
-@pytest.mark.parametrize("input_data", load_test_data("web_ui_common_test_data"))
+@pytest.mark.parametrize("input_data", load_test_data("web_ui", "web_ui_common_test_data"))
 def test_inventory_page_add_items_to_cart(driver, logger, input_data):
     """
     Test that items can be added from Inventory page into shopping cart.
@@ -63,7 +63,7 @@ def test_inventory_page_add_items_to_cart(driver, logger, input_data):
         raise
 
 
-@pytest.mark.parametrize("input_data", load_test_data("web_ui_common_test_data"))
+@pytest.mark.parametrize("input_data", load_test_data("web_ui", "web_ui_common_test_data"))
 def test_cart_page_view_shopping_cart(driver, logger, input_data):
     """
     Test that added items from Inventory page are present in Cart page.
@@ -94,7 +94,7 @@ def test_cart_page_view_shopping_cart(driver, logger, input_data):
         raise
 
 
-@pytest.mark.parametrize("input_data", load_test_data("web_ui_common_test_data"))
+@pytest.mark.parametrize("input_data", load_test_data("web_ui", "web_ui_common_test_data"))
 def test_checkout_one_page_fill_buyer_information(driver, input_data, logger):
     """
     Test that the form for buyer information in Checkout step One page can be filled.
@@ -134,7 +134,7 @@ def test_checkout_one_page_fill_buyer_information(driver, input_data, logger):
         raise
 
 
-@pytest.mark.parametrize("input_data", load_test_data("web_ui_common_test_data"))
+@pytest.mark.parametrize("input_data", load_test_data("web_ui", "web_ui_common_test_data"))
 def test_checkout_two_page_verify_items_in_order(driver, logger, input_data):
     """
     Test that the checkout overview in Checkout step Two page represents the order correctly.
@@ -177,7 +177,7 @@ def test_checkout_two_page_verify_items_in_order(driver, logger, input_data):
         raise
 
 
-@pytest.mark.parametrize("input_data", load_test_data("web_ui_common_test_data"))
+@pytest.mark.parametrize("input_data", load_test_data("web_ui", "web_ui_common_test_data"))
 def test_checkout_complete_page_verify_order_is_completed(driver, logger, input_data):
     """
     Test that the order is completed.

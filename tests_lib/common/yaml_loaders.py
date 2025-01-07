@@ -33,15 +33,16 @@ def load_config(config_name: str):
     return load_yaml(file_path)
 
 
-def load_test_data(data_name: str) -> Any:
+def load_test_data(data_folder: str, data_file: str) -> Any:
     """
     Load a test data YAML file from the 'test_data' folder.
 
-    :param data_name: Name of the test data file (without the .yaml extension).
+    :param data_folder: Name of the folder corresponding to test category - "api" or "web_ui"
+    :param data_file: Name of the test data file (without the .yaml extension).
     :return: Contents of the YAML file, which can be a Python dictionary, list, or other supported.
     :raises FileNotFoundError: If the file does not exist.
     :raises RuntimeError: If the YAML file cannot be parsed
     """
     base_path = Path(__file__).resolve().parent.parent.parent / 'test_data'
-    file_path = base_path / f"{data_name}.yaml"
+    file_path = base_path / data_folder / f"{data_file}.yaml"
     return load_yaml(file_path)
