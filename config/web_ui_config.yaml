@@ -1,3 +1,4 @@
+log_file_name: "web_ui_tests.log"
 executor: "http://selenium-hub:4444"
 browser: chrome # chrome, firefox or MicrosoftEdge
 implicit_wait_time: 5
