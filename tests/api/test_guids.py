@@ -49,12 +49,11 @@ def test_post_guid_add_without_guid(logger_fixture: CustomLogger, request_execut
         raise
 
 
-@pytest.mark.parametrize("status_code", load_json(TEST_DATA_PATH + "http_status_codes.json")["HTTP_STATUS_CODES_FOR_PUT"])
+@pytest.mark.parametrize("status_code", load_json(TEST_DATA_PATH + "http_status_codes.json")["HTTP_STATUS_CODES"])
 def test_put_guids(status_code: int | str, logger_fixture: CustomLogger, request_executor):
     """
     Test guids functionality of mock-api-server.
-    After executing the put method, we check that the get method for the corresponding guid value will return
-    the updated value.
+    Executing the put method.
     """
     logger_fixture.info(f"Starting test_put_get_guids with status_code: {status_code}")
     try:
