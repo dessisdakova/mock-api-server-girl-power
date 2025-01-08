@@ -1,3 +1,2 @@
 log_file_dir: "/opt/project/logs/"
 log_level: "DEBUG"
-# add new common parameters for all tests here ...
