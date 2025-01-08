@@ -1,24 +1,24 @@
 import pytest
 
-from tests.api.constants import TEST_DATA_PATH
+from tests.api.constants import TEST_DATA_PATH, GUID_GET_URL, GUID_ADD_URL
 from tests_lib.helpers.api.request_executors.request_executor_fixture import request_executor
 from tests_lib.common.custom_logger import CustomLogger
 from tests_lib.common.json_loader import load_json
-
-#TODO: execute_put("/guids", empty_guids), url somehow change it
 
 
 @pytest.fixture(autouse=True, scope="function")
 def clear_guids(request_executor, logger_fixture):
     """
-    This fixture is run before each test case.
+    This fixture cleans the internal guids data after the test execution.
     It's required in order to clean the internal guids data in the mock server,
     so all tests can run independently and reliably
     """
-    logger_fixture.info("clear_guids")
+    yield
+    logger_fixture.info("clearing guids")
     empty_guids = load_json(TEST_DATA_PATH + 'PUT_guids_empty_list.json')
-    put_response = request_executor.execute_put("/guids", empty_guids)
+    put_response = request_executor.execute_put(GUID_GET_URL, empty_guids)
     assert put_response.status_code == 200
+    logger_fixture.info("guids cleared")
 
 
 def test_post_guid_add(logger_fixture: CustomLogger, request_executor):
@@ -27,7 +27,9 @@ def test_post_guid_add(logger_fixture: CustomLogger, request_executor):
     """
     try:
         new_guid = load_json(TEST_DATA_PATH + "new_guid.json")
-        post_response = request_executor.execute_post(f"/{new_guid}/add")
+        add_url = GUID_ADD_URL.replace("<path:guid>", new_guid)
+
+        post_response = request_executor.execute_post(add_url)
         assert post_response.status_code == 200
         assert new_guid in post_response.json()['guids']
         logger_fixture.info("Test passed successfully")
@@ -59,7 +61,7 @@ def test_put_guids(status_code: int | str, logger_fixture: CustomLogger, request
     try:
         expected_data_json = load_json(TEST_DATA_PATH + "PUT_guids_positive.json")
         expected_data_json["status_code"] = status_code
-        put_response = request_executor.execute_put(f"/guids", expected_data_json)
+        put_response = request_executor.execute_put(GUID_GET_URL, expected_data_json)
         put_response_json = put_response.json()
         assert put_response.status_code == 200
         assert put_response_json["new_status_code"] == status_code
@@ -83,7 +85,7 @@ def test_put_guids_without_key_body(test_file, logger_fixture: CustomLogger, req
     test_file_path = TEST_DATA_PATH + test_file
     try:
         expected_data_json = load_json(test_file_path)
-        put_response = request_executor.execute_put("/guids", expected_data_json)
+        put_response = request_executor.execute_put(GUID_GET_URL, expected_data_json)
         assert put_response.status_code == 500
         logger_fixture.info("Test passed successfully")
     except AssertionError as e:
@@ -98,7 +100,7 @@ def test_put_guids_without_request_body(logger_fixture: CustomLogger, request_ex
     In this case PUT request doesn't have any content.
     """
     try:
-        put_response = request_executor.execute_put("/guids")
+        put_response = request_executor.execute_put(GUID_GET_URL)
         assert put_response.status_code == 400
         logger_fixture.info("Test passed successfully")
     except AssertionError as e:
@@ -112,7 +114,7 @@ def test_get_guids(logger_fixture: CustomLogger, request_executor):
     """
     try:
         expected_data_json = load_json(TEST_DATA_PATH + "PUT_guids_empty_list.json")
-        get_rsp = request_executor.execute_get(f"/guids")
+        get_rsp = request_executor.execute_get(GUID_GET_URL)
         assert get_rsp.status_code == expected_data_json["status_code"]
         assert get_rsp.json() == expected_data_json["body"]
         logger_fixture.info("Test passed successfully")
@@ -128,10 +130,11 @@ def test_post_several_items(logger_fixture: CustomLogger, request_executor):
     """
     try:
         new_guid = load_json(TEST_DATA_PATH + "new_guid.json")
+        add_url = GUID_ADD_URL.replace("<path:guid>", new_guid)
         for _ in range(5):
-            request_executor.execute_post(f"/{new_guid}/add")
+            request_executor.execute_post(add_url)
 
-        get_rsp = request_executor.execute_get(f"/guids")
+        get_rsp = request_executor.execute_get(GUID_GET_URL)
         assert get_rsp.status_code == 200
         assert get_rsp.json()['guids'] == [new_guid] * 5
     except AssertionError as e:
