@@ -20,7 +20,7 @@ class RequestExecutor(ABC):
 
 
     @abstractmethod
-    def execute_post(self, url: str) -> requests.Response:
+    def execute_post(self, url: str, files: Optional[dict] = None) -> requests.Response:
         """
         This post method as abstract, must be implemented by any subclass of the RequestExecutor(ABC)
         """

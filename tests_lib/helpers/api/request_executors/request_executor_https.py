@@ -29,14 +29,14 @@ class RequestExecutorHttps(RequestExecutor):
         return requests.get(self.config["base_url_https"] + url, verify=self.config["https_config"]["cert_file"])
 
 
-    def execute_post(self, url: str) -> requests.Response:
+    def execute_post(self, url: str, files: Optional[dict] = None) -> requests.Response:
         """
         Executes an HTTPS POST request.
         Logs the request and sends an HTTPS POST request to the specified URL
         with certificate verification.
         """
         self.logger.info("Executing HTTPS POST")
-        return requests.post(self.config["base_url_https"] + url, verify=self.config["https_config"]["cert_file"])
+        return requests.post(self.config["base_url_https"] + url, verify=self.config["https_config"]["cert_file"], files=files)
 
 
     def execute_put(self, url: str, body: Optional[dict] = None) -> requests.Response:
