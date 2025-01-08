@@ -29,7 +29,8 @@ def logger_fixture(request, config_fixture: dict) -> CustomLogger:
     The 'request' fixture is a special fixture providing information of the requesting test function
     :yield: An instance of CustomLogger.
     """
-    local_logger = CustomLogger("test_logger", config_fixture[ "log_file_name" ])
+    local_logger = CustomLogger("test_logger", config_fixture["log_file_name"])
     local_logger.debug(f"Starting {request.node.originalname}")
     yield local_logger
     local_logger.debug(f"Test {request.node.originalname} finished")
+    local_logger.add_divider()
