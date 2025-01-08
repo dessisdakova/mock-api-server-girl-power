@@ -71,5 +71,6 @@ def driver(config, logger, request) -> Generator[webdriver.Remote, None, None]:
     yield driver
     driver.quit()
 
+    logger.info("Test completed.")
     logger.debug(f"WebDriver is closed.")
     logger.add_divider()

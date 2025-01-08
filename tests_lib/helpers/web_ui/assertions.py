@@ -3,15 +3,14 @@ from selenium import webdriver
 
 class Assertions:
     @staticmethod
-    def assert_text_in_current_url(driver: webdriver.Remote, text: str) -> None:
+    def assert_text_in_current_url(current_url: str, text: str) -> None:
         """
         Assert that a specific text is present in the current URL of the web driver.
 
-        :param driver: The web driver instance used to retrieve the current URL.
+        :param current_url: The current URL of the driver.
         :param text: The text expected to be present in the current URL.
         :raises AssertionError: If the specified text is not found in the current URL.
         """
-        current_url = driver.current_url
         assert text in current_url, f"Expected text '{text}' not found in URL '{current_url}'."
 
     @staticmethod
@@ -37,23 +36,6 @@ class Assertions:
         """
         actual_count = actual_count
         assert actual_count == expected_count, f"Expected {expected_count} items in cart, but found {actual_count}."
-
-    @staticmethod
-    def assert_buyer_info_is_entered(actual_info: tuple, expected_fn: str, expected_ln: str, expected_zc: str) -> None:
-        """
-        Assert that the buyer's first name, last name, and zip code are correctly entered in the form.
-
-        :param actual_info: A tuple containing the actual first name, last name, and zip code values.
-        :param expected_fn: The expected value for the first name field.
-        :param expected_ln: The expected value for the last name field.
-        :param expected_zc: The expected value for the zip code field.
-        :raises AssertionError: If any of the entered values do not match the expected values.
-        """
-        actual_fn, actual_ln, actual_zc = actual_info
-
-        assert actual_fn == expected_fn, f"First name does not match - expected: {expected_fn}, actual: {actual_fn}"
-        assert actual_ln == expected_ln, f"Last name does not match - expected: {expected_ln}, actual: {actual_ln}"
-        assert actual_zc == str(expected_zc), f"Zip code does not match - expected: {expected_zc}, actual: {actual_zc}"
 
     @staticmethod
     def assert_items_count_in_order(actual_count: int, expected_count: int) -> None:
