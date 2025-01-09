@@ -25,13 +25,13 @@ class RequestExecutorHttp(RequestExecutor):
         self.logger.info("Executing HTTP GET")
         return requests.get(self.config["base_url_http"] + url)
 
-    def execute_post(self, url: str) -> requests.Response:
+    def execute_post(self, url: str, files: Optional[dict] = None) -> requests.Response:
         """
         Executes an HTTP POST request.
         Logs the request and sends an HTTP POST request to the specified URL.
         """
         self.logger.info("Executing HTTP POST")
-        return requests.post(self.config["base_url_http"] + url)
+        return requests.post(self.config["base_url_http"] + url, files=files)
 
     def execute_put(self, url: str, body: Optional[dict] = None) -> requests.Response:
         """
