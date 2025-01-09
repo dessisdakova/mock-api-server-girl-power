@@ -24,6 +24,12 @@ class BasePage:
         """
         return "https://www.saucedemo.com/"
 
+    def get_current_url(self):
+        """
+        Return the current driver url.
+        """
+        return self.driver.current_url
+
     def load(self, explicit_wait: int) -> None:
         """
         Navigate to the base URL and wait for the page to load using explicit wait.

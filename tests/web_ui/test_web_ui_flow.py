@@ -17,19 +17,14 @@ def test_login_page_successful_login(driver, input_data, logger):
     # arrange
     login_page = LoginPage(driver)
     login_page.load(5)
+    logger.debug(f"Page with url '{login_page.base_url}' is loaded.")
 
     # act
-    logger.debug(f"Page with url '{login_page.base_url}' is loaded.")
-    logger.debug(f"Login with username: {input_data['username']}.")
     login_page.login(input_data["username"], input_data["password"])
+    logger.debug(f"Login with username: {input_data['username']}.")
 
     # assert
-    try:
-        Assertions.assert_text_in_current_url(driver, "inventory")
-        logger.info("Test PASSED.")
-    except AssertionError as e:
-        logger.error(f"Test FAILED. \n AssertionError: \n {e}")
-        raise
+    Assertions.assert_text_in_current_url(login_page.get_current_url(), "inventory")
 
 
 @pytest.mark.parametrize("input_data", load_test_data("web_ui", "web_ui_common_test_data"))
@@ -42,9 +37,9 @@ def test_inventory_page_add_items_to_cart(driver, logger, input_data):
     login_page.load(5)
     login_page.login(input_data["username"], input_data["password"])
     logger.debug(f"Login with username: {input_data['username']}.")
-    logger.info("Login button is clicked, loading inventory page...")
     inventory_page = InventoryPage(driver)
     inventory_page.load(5)
+    logger.debug(f"Page with url '{inventory_page.base_url}' is loaded.")
 
     # act
     inventory_page.add_item_to_cart("backpack")
@@ -53,18 +48,12 @@ def test_inventory_page_add_items_to_cart(driver, logger, input_data):
     logger.info("'Sauce Labs Bike Light' is added to cart.")
 
     # assert
-    try:
-        Assertions.assert_text_in_current_url(driver, "inventory")
-        logger.debug(f"Number of items in cart: {inventory_page.get_items_count_in_cart()}")
-        Assertions.assert_items_count_in_inventory_page(inventory_page.get_items_count_in_cart(), 2)
-        logger.info("Test PASSED.")
-    except AssertionError as e:
-        logger.error(f"Test FAILED. \n AssertionError: \n {e}")
-        raise
+    Assertions.assert_text_in_current_url(inventory_page.get_current_url(), "inventory")
+    Assertions.assert_items_count_in_inventory_page(inventory_page.get_items_count_in_cart(), 2)
 
 
 @pytest.mark.parametrize("input_data", load_test_data("web_ui", "web_ui_common_test_data"))
-def test_cart_page_view_shopping_cart(driver, logger, input_data):
+def test_cart_page_verify_items_in_shopping_cart(driver, logger, input_data):
     """
     Test that added items from Inventory page are present in Cart page.
     """
@@ -76,68 +65,91 @@ def test_cart_page_view_shopping_cart(driver, logger, input_data):
     inventory_page = InventoryPage(driver)
     inventory_page.load(5)
     inventory_page.add_item_to_cart("backpack")
-    inventory_page.add_item_to_cart("bike-light")
+    logger.info("'Sauce Labs Backpack' is added to cart.")
     inventory_page.go_to_cart()
-    logger.info("Shopping cart link is clicked, loading cart page...")
 
     # act
     cart_page = CartPage(driver)
     cart_page.load(5)
+    logger.debug(f"Page with url '{cart_page.base_url}' is loaded.")
 
     # assert
-    try:
-        Assertions.assert_text_in_current_url(driver, "cart")
-        Assertions.assert_items_count_in_cart_page(cart_page.get_items_count_in_cart(), 2)
-        logger.info("Test PASSED.")
-    except AssertionError as e:
-        logger.error(f"Test FAILED. \n AssertionError: \n {e}")
-        raise
+    Assertions.assert_text_in_current_url(cart_page.get_current_url(), "cart")
+    Assertions.assert_items_count_in_cart_page(cart_page.get_items_count_in_cart(), 1)
 
 
 @pytest.mark.parametrize("input_data", load_test_data("web_ui", "web_ui_common_test_data"))
-def test_checkout_one_page_fill_buyer_information(driver, input_data, logger):
+def test_cart_page_verify_checkout_button(driver, logger, input_data):
     """
-    Test that the form for buyer information in Checkout step One page can be filled.
+    Test that the Checkout button in Cart page redirects to Checkout step One page.
     """
     # arrange
     login_page = LoginPage(driver)
     login_page.load(5)
     login_page.login(input_data["username"], input_data["password"])
     logger.debug(f"Login with username: {input_data['username']}.")
-
-    inventory_page = InventoryPage(driver)
-    inventory_page.load(5)
-    inventory_page.add_item_to_cart("backpack")
-    inventory_page.add_item_to_cart("bike-light")
-    inventory_page.go_to_cart()
-
     cart_page = CartPage(driver)
     cart_page.load(5)
-    cart_page.click_checkout()
-    logger.info("Checkout button is clicked, loading checkout step one page...")
+    logger.debug(f"Page with url '{cart_page.base_url}' is loaded.")
 
     # act
-    checkout_one_page = CheckoutOnePage(driver)
-    checkout_one_page.load(5)
-    logger.info(f"Page with url '{checkout_one_page.base_url}' is loaded.")
-    checkout_one_page.enter_buyer_info(
-        input_data["first_name"], input_data["last_name"], input_data["postal_code"])
+    cart_page.click_checkout_button()
 
     # assert
-    try:
-        Assertions.assert_text_in_current_url(driver, "checkout-step-one")
-        Assertions.assert_buyer_info_is_entered(checkout_one_page.get_buyer_info(), input_data["first_name"],
-                                                input_data["last_name"], input_data["postal_code"])
-        logger.info("Test PASSED.")
-    except AssertionError as e:
-        logger.error(f"Test FAILED. \n AssertionError: \n {e}")
-        raise
+    Assertions.assert_text_in_current_url(cart_page.get_current_url(), "checkout-step-one")
+
+
+@pytest.mark.parametrize("input_data", load_test_data("web_ui", "web_ui_common_test_data"))
+def test_checkout_one_page_verify_continue_button_with_buyer_information(driver, input_data, logger):
+    """
+    Test that the Continue button in Checkout One page
+    redirects to Checkout Two page when buyer information is filled.
+    """
+    # arrange
+    login_page = LoginPage(driver)
+    login_page.load(5)
+    login_page.login(input_data["username"], input_data["password"])
+    logger.debug(f"Login with username: {input_data['username']}.")
+    checkout_one_page = CheckoutOnePage(driver)
+    checkout_one_page.load(5)
+    logger.debug(f"Page with url '{checkout_one_page.base_url}' is loaded.")
+
+    # act
+    checkout_one_page.enter_buyer_info(
+        input_data["first_name"], input_data["last_name"], input_data["postal_code"])
+    checkout_one_page.click_continue_button()
+
+    # assert
+    Assertions.assert_text_in_current_url(checkout_one_page.get_current_url(), "checkout-step-two")
+
+
+@pytest.mark.parametrize("input_data", load_test_data("web_ui", "web_ui_common_test_data"))
+def test_checkout_one_page_verify_continue_button_without_buyer_information(driver, input_data, logger):
+    """
+    Test that the Continue button in Checkout One page
+    redirects to Checkout Two page when buyer information is not filled.
+    """
+    # arrange
+    login_page = LoginPage(driver)
+    login_page.load(5)
+    login_page.login(input_data["username"], input_data["password"])
+    logger.debug(f"Login with username: {input_data['username']}.")
+    checkout_one_page = CheckoutOnePage(driver)
+    checkout_one_page.load(5)
+    logger.debug(f"Page with url '{checkout_one_page.base_url}' is loaded.")
+
+    # act
+    checkout_one_page.click_continue_button()
+
+    # assert
+    Assertions.assert_text_in_current_url(checkout_one_page.get_current_url(), "checkout-step-one")
 
 
 @pytest.mark.parametrize("input_data", load_test_data("web_ui", "web_ui_common_test_data"))
 def test_checkout_two_page_verify_items_in_order(driver, logger, input_data):
     """
-    Test that the checkout overview in Checkout step Two page represents the order correctly.
+    Test that items in the checkout overview in Checkout Two page
+    match the items added in Inventory page.
     """
     # arrange
     login_page = LoginPage(driver)
@@ -148,77 +160,55 @@ def test_checkout_two_page_verify_items_in_order(driver, logger, input_data):
     inventory_page = InventoryPage(driver)
     inventory_page.load(5)
     inventory_page.add_item_to_cart("backpack")
-    inventory_page.add_item_to_cart("bike-light")
-    inventory_page.go_to_cart()
-
-    cart_page = CartPage(driver)
-    cart_page.load(5)
-    cart_page.click_checkout()
-
-    checkout_one_page = CheckoutOnePage(driver)
-    checkout_one_page.load(5)
-    checkout_one_page.enter_buyer_info(
-        input_data["first_name"], input_data["last_name"], input_data["postal_code"])
-    checkout_one_page.click_continue_button()
-    logger.info("Continue button is clicked, loading checkout step two page...")
+    logger.info("'Sauce Labs Backpack' is added to cart.")
 
     # act
     checkout_two_page = CheckoutTwoPage(driver)
     checkout_two_page.load(5)
-    logger.debug(f"Number of items in order: {checkout_two_page.get_items_count_in_order()}")
+    logger.debug(f"Page with url '{checkout_two_page.base_url}' is loaded.")
 
     # assert
-    try:
-        Assertions.assert_text_in_current_url(driver, "checkout-step-two")
-        Assertions.assert_items_count_in_order(checkout_two_page.get_items_count_in_order(), 2)
-        logger.info("Test PASSED.")
-    except AssertionError as e:
-        logger.error(f"Test FAILED. \n AssertionError: \n {e}")
-        raise
+    Assertions.assert_text_in_current_url(checkout_two_page.get_current_url(), "checkout-step-two")
+    Assertions.assert_items_count_in_order(checkout_two_page.get_items_count_in_order(), 1)
 
 
 @pytest.mark.parametrize("input_data", load_test_data("web_ui", "web_ui_common_test_data"))
-def test_checkout_complete_page_verify_order_is_completed(driver, logger, input_data):
+def test_checkout_two_page_verify_finish_button(driver, logger, input_data):
     """
-    Test that the order is completed.
+    Test that the Finish button redirects to Checkout Complete page.
     """
     # arrange
     login_page = LoginPage(driver)
     login_page.load(5)
     login_page.login(input_data["username"], input_data["password"])
     logger.debug(f"Login with username: {input_data['username']}.")
-
-    inventory_page = InventoryPage(driver)
-    inventory_page.load(5)
-    inventory_page.add_item_to_cart("backpack")
-    inventory_page.add_item_to_cart("bike-light")
-    inventory_page.go_to_cart()
-
-    cart_page = CartPage(driver)
-    cart_page.load(5)
-    cart_page.click_checkout()
-
-    checkout_one_page = CheckoutOnePage(driver)
-    checkout_one_page.load(5)
-    checkout_one_page.enter_buyer_info(
-        input_data["first_name"], input_data["last_name"], input_data["postal_code"])
-    checkout_one_page.click_continue_button()
-
     checkout_two_page = CheckoutTwoPage(driver)
     checkout_two_page.load(5)
+    logger.debug(f"Page with url '{checkout_two_page.base_url}' is loaded.")
+
+    # act
     checkout_two_page.click_finish_button()
-    logger.info("Finish button is clicked, loading checkout complete page...")
+
+    # assert
+    Assertions.assert_text_in_current_url(checkout_two_page.get_current_url(), "checkout-complete")
+
+
+@pytest.mark.parametrize("input_data", load_test_data("web_ui", "web_ui_common_test_data"))
+def test_checkout_complete_page_verify_message(driver, logger, input_data):
+    """
+    Test that the message for complete order in present.
+    """
+    # arrange
+    login_page = LoginPage(driver)
+    login_page.load(5)
+    login_page.login(input_data["username"], input_data["password"])
+    logger.debug(f"Login with username: {input_data['username']}.")
 
     # act
     checkout_complete = CheckoutCompletePage(driver)
     checkout_complete.load(5)
-    logger.info(f"Page with url '{checkout_complete.base_url}' is loaded.")
+    logger.debug(f"Page with url '{checkout_complete.base_url}' is loaded.")
 
     # assert
-    try:
-        Assertions.assert_text_in_current_url(driver, "checkout-complete")
-        Assertions.assert_message_for_complete_order(checkout_complete.get_message_text(), "Thank you for your order!")
-        logger.info("Test PASSED.")
-    except AssertionError as e:
-        logger.error(f"Test FAILED. \n AssertionError: \n {e}")
-        raise
+    Assertions.assert_text_in_current_url(checkout_complete.get_current_url(), "checkout-complete")
+    Assertions.assert_message_for_complete_order(checkout_complete.get_message_text(), "Thank you for your order!")

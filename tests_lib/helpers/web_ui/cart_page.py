@@ -33,7 +33,7 @@ class CartPage(BasePage):
         """
         return len(self.driver.find_elements(*ITEMS_IN_CART))
 
-    def click_checkout(self) -> None:
+    def click_checkout_button(self) -> None:
         """
         Navigate to the checkout step one page by clicking the checkout button.
         """
