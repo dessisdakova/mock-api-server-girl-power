@@ -6,3 +6,4 @@ env/
 .idea/
 logs/*
 !logs/keep
+*.DS_Store
