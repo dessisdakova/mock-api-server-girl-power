@@ -34,7 +34,7 @@ class CustomLogger(logging.Logger):
 
         # create a formatter
         formatter = logging.Formatter(
-            "%(asctime)s | %(levelname)s | %(name)s | %(filename)s | %(message)s", datefmt="%Y/%m/%d %H:%M:%S")
+            "%(asctime)s | %(levelname)-5s | %(name)s | %(filename)s | %(message)s", datefmt="%Y/%m/%d %H:%M:%S")
         handler.setFormatter(formatter)
 
         # add handler the created custom logger
@@ -46,4 +46,4 @@ class CustomLogger(logging.Logger):
 
         """
         with open(self.log_file_path, "a") as log_file:
-            log_file.write("-------------------------------------------------------------------\n")
+            log_file.write("----------------------------------------------------------------------------------------\n")

@@ -55,12 +55,7 @@ def driver(config) -> Generator[webdriver.Remote, None, None]:
         raise ValueError(f"Unsupported browser: '{config['browser']}'")
     options.add_argument("--headless")
 
-    try:
-        driver = webdriver.Remote(command_executor=config["executor"], options=options)
-    except Exception as e:
-        logger.error(f"Failed to initialize WebDriver: {e}")
-        raise
-
+    driver = webdriver.Remote(command_executor=config["executor"], options=options)
     driver.implicitly_wait(config["implicit_wait_time"])
     yield driver
     driver.quit()
