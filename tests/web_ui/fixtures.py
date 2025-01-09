@@ -12,7 +12,7 @@ from pytest_custom_outputs import get_results
 @pytest.fixture(scope="session")
 def config() -> dict:
     """
-    Fixture to load and provide the web UI configuration for the test session.
+    Fixture to load and provide the driver configuration.
 
     :return: A dictionary containing the loaded configuration.
     """
@@ -33,16 +33,14 @@ def logger(config) -> CustomLogger:
 
 
 @pytest.fixture(scope="function")
-def driver(config, logger, request) -> Generator[webdriver.Remote, None, None]:
+def driver(config) -> Generator[webdriver.Remote, None, None]:
     """
-    Fixture to initialize a web driver for UI tests based on the configuration.
+    Fixture to initialize a web driver for tests based on the configuration.
 
     This fixture sets up the selected browser (Chrome, Firefox, or Edge) in headless mode
     and creates a remote WebDriver instance. It also sets an implicit wait time for elements.
 
     :param config: Config fixture.
-    :param logger: Logger fixture.
-    :param request: Request object providing test context information.
     :return: A web driver instance to be used for the duration of the test session.
     :raises TypeError: If the specified browser is not supported.
     """
@@ -64,15 +62,39 @@ def driver(config, logger, request) -> Generator[webdriver.Remote, None, None]:
         raise
 
     driver.implicitly_wait(config["implicit_wait_time"])
-
-    capabilities = driver.capabilities
-    logger.debug(f"Initialized WebDriver for {capabilities['browserName']} version {capabilities['browserVersion']}.")
-    logger.info(f"Running test '{request.node.name}'...")
-
     yield driver
     driver.quit()
 
-    logger.info(f"{get_results(request)}")
-    logger.info("Test completed.")
+
+@pytest.fixture(scope="function")
+def driver_capabilities(driver) -> dict:
+    """
+    Fixture to provide the capabilities of the WebDriver instance.
+
+    :param driver: Fixture for web driver.
+    :return: A dictionary containing information about the WebDriver's capabilities (e.g., browser name, version).
+    """
+    return driver.capabilities
+
+
+@pytest.fixture(scope="function", autouse=True)
+def log_test_start_and_result(logger, request, driver_capabilities) -> None:
+    """
+    Fixture to log the start and result of each test.
+
+    :param logger: Fixture for logging.
+    :param request: The pytest request object providing information about the current test.
+    :param driver_capabilities: Fixture providing the WebDriver's capabilities.
+    """
+    logger.debug(f"Initialized WebDriver for {driver_capabilities['browserName']} "
+                 f"version {driver_capabilities['browserVersion']}.")
+    logger.info(f"Running test '{request.node.name}'...")
+    yield
+    if get_results(request)["status"] == "passed":
+        logger.info("Test PASSED.")
+    elif get_results(request)["status"] == "failed":
+        logger.error(f"Test FAILED. \n Error: \n {get_results(request)['message']}")
+    else:
+        logger.info(f"Test {get_results(request)['status']}.")
     logger.debug(f"WebDriver is closed.")
     logger.add_divider()
