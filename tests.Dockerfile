@@ -18,5 +18,4 @@ COPY poetry.lock        /opt/project/poetry.lock
 COPY pyproject.toml     /opt/project/pyproject.toml
 RUN poetry config virtualenvs.in-project true
 RUN poetry config virtualenvs.options.no-pip true
-RUN poetry config virtualenvs.options.no-setuptools true
 RUN poetry install

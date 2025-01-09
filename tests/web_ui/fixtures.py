@@ -6,6 +6,7 @@ from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.edge.options import Options as EdgeOptions
 import pytest
 from typing import Generator
+from pytest_custom_outputs import get_results
 
 
 @pytest.fixture(scope="session")
@@ -71,6 +72,7 @@ def driver(config, logger, request) -> Generator[webdriver.Remote, None, None]:
     yield driver
     driver.quit()
 
+    logger.info(f"{get_results(request)}")
     logger.info("Test completed.")
     logger.debug(f"WebDriver is closed.")
     logger.add_divider()

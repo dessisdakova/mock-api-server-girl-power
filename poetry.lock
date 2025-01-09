@@ -354,6 +354,20 @@ pluggy = ">=1.5,<2"
 dev = ["argcomplete", "attrs (>=19.2)", "hypothesis (>=3.56)", "mock", "pygments (>=2.7.2)", "requests", "setuptools", "xmlschema"]
 
 [[package]]
+name = "pytest-custom-outputs"
+version = "1.1.1"
+description = "A plugin that allows users to create and use custom outputs instead of the standard Pass and Fail. Also allows users to retrieve test results in fixtures."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "pytest_custom_outputs-1.1.1-py3-none-any.whl", hash = "sha256:b159a5d6ff8fa5f6d7fb65fedcd7d0bad69da9291137840a24711d923d0a9cd0"},
+    {file = "pytest_custom_outputs-1.1.1.tar.gz", hash = "sha256:1d4821dd78b2106d5da8dd64a0d7fc23267256a2e41f7eed7764a99e69646ae8"},
+]
+
+[package.dependencies]
+pytest = ">=6.2.0"
+
+[[package]]
 name = "python-dotenv"
 version = "1.0.1"
 description = "Read key-value pairs from a .env file and set them as environment variables"
@@ -605,4 +619,4 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "db4feb6d0a9f3049f9ef9997d7a40753b426377990cf87786414f4efac0119e9"
+content-hash = "345291b1a63409fd238d58187d0e1844d1f2e744c8bb577ffd26c1ed881de4fa"
