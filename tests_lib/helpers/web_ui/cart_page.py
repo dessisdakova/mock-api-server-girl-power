@@ -33,6 +33,15 @@ class CartPage(BasePage):
         """
         return len(self.driver.find_elements(*ITEMS_IN_CART))
 
+    def get_item_names_in_cart(self) -> list:
+        """
+        Retrieve the names of all items in the cart.
+
+        :return: A list of item names added to the cart.
+        """
+        elements = self.driver.find_elements(*ITEMS_NAME_IN_CART)
+        return [element.text for element in elements]
+
     def click_checkout_button(self) -> None:
         """
         Navigate to the checkout step one page by clicking the checkout button.

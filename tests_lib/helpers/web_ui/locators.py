@@ -16,6 +16,7 @@ INVENTORY_CONTAINER = (By.ID, "inventory_container")  # for explicit wait
 # Cart Page
 CHECKOUT_BUTTON = (By.CSS_SELECTOR, "button[data-test='checkout']")
 ITEMS_IN_CART = (By.CSS_SELECTOR, "div[data-test='inventory-item']")  # Also used on Checkout Step Two Page
+ITEMS_NAME_IN_CART = (By.CSS_SELECTOR, "div[data-test='inventory-item-name']") # Also used on Checkout Step Two Page
 CART_CONTENTS_CONTAINER = (By.ID, "cart_contents_container")  # for explicit wait
 
 # Checkout Step One Page
