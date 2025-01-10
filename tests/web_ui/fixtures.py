@@ -22,7 +22,7 @@ def config() -> dict:
 @pytest.fixture(scope="session")
 def logger(config) -> CustomLogger:
     """
-    Fixture to provide a logger for web UI tests.
+    Fixture to provide a CustomLogger instance for logging tests.
 
     :param config: Config fixture.
     :return: A CustomLogger instance for logging test-related information.
@@ -38,10 +38,10 @@ def driver(config) -> Generator[webdriver.Remote, None, None]:
     Fixture to initialize a web driver for tests based on the configuration.
 
     This fixture sets up the selected browser (Chrome, Firefox, or Edge) in headless mode
-    and creates a remote WebDriver instance. It also sets an implicit wait time for elements.
+    and creates a remote WebDriver instance. It also sets an implicit wait time.
 
     :param config: Config fixture.
-    :return: A web driver instance to be used for the duration of the test session.
+    :return: A web driver instance to be used for the duration of each test.
     :raises TypeError: If the specified browser is not supported.
     """
 
@@ -49,7 +49,7 @@ def driver(config) -> Generator[webdriver.Remote, None, None]:
         options = ChromeOptions()
     elif config["browser"] == "firefox":
         options = FirefoxOptions()
-    elif config["browser"] == "MicrosoftEdge":
+    elif config["browser"] == "edge":
         options = EdgeOptions()
     else:
         raise ValueError(f"Unsupported browser: '{config['browser']}'")
