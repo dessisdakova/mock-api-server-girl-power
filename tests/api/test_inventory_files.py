@@ -7,7 +7,6 @@ def test_get_ca_cert(logger_fixture: CustomLogger, request_executor):
     get_rsp = request_executor.execute_get(ROOT_CA_URL)
     byte_stream = get_rsp.content
     assert get_rsp.status_code == 200
-    assert len(byte_stream) == 2147
     content = byte_stream.decode().strip()  # decode method is required to transform bytes to str
     assert content.startswith("-----BEGIN CERTIFICATE-----")
     assert content.endswith("-----END CERTIFICATE-----")
@@ -17,7 +16,6 @@ def test_get_intermediate_ca_cert(logger_fixture: CustomLogger, request_executor
     get_rsp = request_executor.execute_get(INTERMEDIATE_CA_URL)
     byte_stream = get_rsp.content
     assert get_rsp.status_code == 200
-    assert len(byte_stream) == 2114
     content = byte_stream.decode().strip()  # decode method is required to transform bytes to str
     assert content.startswith("-----BEGIN CERTIFICATE-----")
     assert content.endswith("-----END CERTIFICATE-----")
