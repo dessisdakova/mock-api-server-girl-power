@@ -25,30 +25,23 @@ def test_post_guid_add(logger_fixture: CustomLogger, request_executor):
     """
     Verifying positive case: that response return valid body and status for POST request which contain guid in URL.
     """
-    try:
-        new_guid = load_json(TEST_DATA_PATH + "new_guid.json")
-        add_url = GUID_ADD_URL.replace("<path:guid>", new_guid)
+    new_guid = load_json(TEST_DATA_PATH + "new_guid.json")
+    add_url = GUID_ADD_URL.replace("<path:guid>", new_guid)
 
-        post_response = request_executor.execute_post(add_url)
-        assert post_response.status_code == 200
-        assert new_guid in post_response.json()['guids']
-        logger_fixture.info("Test passed successfully")
-    except AssertionError as e:
-        logger_fixture.error(f"Test failed with error: {e}")
-        raise
+    post_response = request_executor.execute_post(add_url)
+    assert post_response.status_code == 200
+    assert new_guid in post_response.json()['guids']
+    logger_fixture.info("Test passed successfully")
 
 
 def test_post_guid_add_without_guid(logger_fixture: CustomLogger, request_executor):
     """
     Verifying negative case: that response return status 404 for POST request which contain no guid in URL.
     """
-    try:
-        post_response = request_executor.execute_post(f"//add")
-        assert post_response.status_code == 404
-        logger_fixture.info("Test passed successfully")
-    except AssertionError as e:
-        logger_fixture.error(f"Test failed with error: {e}")
-        raise
+    post_response = request_executor.execute_post(f"//add")
+    assert post_response.status_code == 404
+    logger_fixture.info("Test passed successfully")
+
 
 
 @pytest.mark.parametrize("status_code", load_json(TEST_DATA_PATH + "http_status_codes.json")["HTTP_STATUS_CODES"])
@@ -58,18 +51,14 @@ def test_put_guids(status_code: int | str, logger_fixture: CustomLogger, request
     Executing the put method.
     """
     logger_fixture.info(f"Starting test_put_get_guids with status_code: {status_code}")
-    try:
-        expected_data_json = load_json(TEST_DATA_PATH + "PUT_guids_positive.json")
-        expected_data_json["status_code"] = status_code
-        put_response = request_executor.execute_put(GUID_GET_URL, expected_data_json)
-        put_response_json = put_response.json()
-        assert put_response.status_code == 200
-        assert put_response_json["new_status_code"] == status_code
-        assert put_response_json["new_body"] == expected_data_json["body"]
-        logger_fixture.info("Test passed successfully")
-    except AssertionError as e:
-        logger_fixture.error(f"Test failed with error: {e}")
-        raise
+    expected_data_json = load_json(TEST_DATA_PATH + "PUT_guids_positive.json")
+    expected_data_json["status_code"] = status_code
+    put_response = request_executor.execute_put(GUID_GET_URL, expected_data_json)
+    put_response_json = put_response.json()
+    assert put_response.status_code == 200
+    assert put_response_json["new_status_code"] == status_code
+    assert put_response_json["new_body"] == expected_data_json["body"]
+    logger_fixture.info("Test passed successfully")
 
 
 @pytest.mark.parametrize("test_file", [
@@ -83,14 +72,10 @@ def test_put_guids_without_key_body(test_file, logger_fixture: CustomLogger, req
     (2) without key status code, but contain the key body
     """
     test_file_path = TEST_DATA_PATH + test_file
-    try:
-        expected_data_json = load_json(test_file_path)
-        put_response = request_executor.execute_put(GUID_GET_URL, expected_data_json)
-        assert put_response.status_code == 500
-        logger_fixture.info("Test passed successfully")
-    except AssertionError as e:
-        logger_fixture.error(f"Test failed with error: {e}")
-        raise
+    expected_data_json = load_json(test_file_path)
+    put_response = request_executor.execute_put(GUID_GET_URL, expected_data_json)
+    assert put_response.status_code == 500
+    logger_fixture.info("Test passed successfully")
 
 
 def test_put_guids_without_request_body(logger_fixture: CustomLogger, request_executor):
@@ -99,28 +84,21 @@ def test_put_guids_without_request_body(logger_fixture: CustomLogger, request_ex
     PUT request body should contain both body and status_code.
     In this case PUT request doesn't have any content.
     """
-    try:
-        put_response = request_executor.execute_put(GUID_GET_URL)
-        assert put_response.status_code == 400
-        logger_fixture.info("Test passed successfully")
-    except AssertionError as e:
-        logger_fixture.error(f"Test failed with error: {e}")
-        raise
+
+    put_response = request_executor.execute_put(GUID_GET_URL)
+    assert put_response.status_code == 400
+    logger_fixture.info("Test passed successfully")
 
 
 def test_get_guids(logger_fixture: CustomLogger, request_executor):
     """
     Test guids functionality of mock-api-server using GET request.
     """
-    try:
-        expected_data_json = load_json(TEST_DATA_PATH + "PUT_guids_empty_list.json")
-        get_rsp = request_executor.execute_get(GUID_GET_URL)
-        assert get_rsp.status_code == expected_data_json["status_code"]
-        assert get_rsp.json() == expected_data_json["body"]
-        logger_fixture.info("Test passed successfully")
-    except AssertionError as e:
-        logger_fixture.error(f"Test failed with error: {e}")
-        raise
+    expected_data_json = load_json(TEST_DATA_PATH + "PUT_guids_empty_list.json")
+    get_rsp = request_executor.execute_get(GUID_GET_URL)
+    assert get_rsp.status_code == expected_data_json["status_code"]
+    assert get_rsp.json() == expected_data_json["body"]
+    logger_fixture.info("Test passed successfully")
 
 
 def test_post_several_items(logger_fixture: CustomLogger, request_executor):
@@ -128,15 +106,12 @@ def test_post_several_items(logger_fixture: CustomLogger, request_executor):
     Test POST request by adding several guids(one at a time) to guids list.
     Then verifying guids list using GET request
     """
-    try:
-        new_guid = load_json(TEST_DATA_PATH + "new_guid.json")
-        add_url = GUID_ADD_URL.replace("<path:guid>", new_guid)
-        for _ in range(5):
-            request_executor.execute_post(add_url)
+    new_guid = load_json(TEST_DATA_PATH + "new_guid.json")
+    add_url = GUID_ADD_URL.replace("<path:guid>", new_guid)
+    for _ in range(5):
+        request_executor.execute_post(add_url)
 
-        get_rsp = request_executor.execute_get(GUID_GET_URL)
-        assert get_rsp.status_code == 200
-        assert get_rsp.json()['guids'] == [new_guid] * 5
-    except AssertionError as e:
-        logger_fixture.error(f"Test failed with error: {e}")
-        raise
+    get_rsp = request_executor.execute_get(GUID_GET_URL)
+    assert get_rsp.status_code == 200
+    assert get_rsp.json()['guids'] == [new_guid] * 5
+
