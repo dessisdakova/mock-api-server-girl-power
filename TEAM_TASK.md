@@ -22,7 +22,7 @@
 - ✅ PR author can decide to implement or not implement NIT comments
 - ✅ If author decided your not NIT marked comment is NIT in fact and both can't agree - the last word to decide has your 3d teammate or if no 3d teammate - one of mentors
 - ✅ If PR has all non-NIT comments addressed and agreed - PR should be approved by teammates and merged
-- ❌ Tests container should be started by one command and run all categories of tests your team has implemented.
+- ✅ Tests container should be started by one command and run all categories of tests your team has implemented.
 - ✅ Only working and runnable tests inside docker container will be checked by mentor.
 - ✅ HTTPS requests in API tests category is optional requirement. ) Team can use HTTP, it's acceptable
 
